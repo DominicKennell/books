@@ -10,6 +10,30 @@ const fs = require('fs');
 const zlib = require('zlib');
 const readline = require('readline');
 
+
+// ---- duplicates ----------------------------------------------------------------------------------------------------
+// Open Library has many "works" for one book (editions, translations, series-numbered titles, name spellings).
+// Two records count as the same book when their trimmed titles match and they share an author surname.
+const ALIAS = { 'nineteen eighty four': '1984', 'harry potter and the sorcerers stone': 'harry potter and the philosophers stone' };
+const titleKey = (t) => { const k = titleKey0(t); return ALIAS[k] || k; };
+const titleKey0 = (t) => String(t).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  .replace(/[\(\[].*?[\)\]]/g, ' ')            // "(Dune Chronicles, #1)", "[large print]"
+  .split(/\s*(?::|;|\s[-\u2013\u2014]\s)/)[0]      // drop subtitles
+  .replace(/[\u2019']/g, '').replace(/^(the|a|an)\s+/, '').replace(/&/g, 'and')
+  .replace(/[^a-z0-9]+/g, ' ').trim();
+const surname = (a) => { const w = String(a).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter((x) => x.length > 1); return w.length ? w[w.length - 1] : ''; };
+function dedupe(recs) {                              // recs sorted by popularity, best first: the first copy wins
+  const seen = new Map(), out = [];
+  for (const r of recs) {
+    const tk = titleKey(r.title); if (!tk) continue;
+    const sn = [...new Set(r.authors.map(surname).filter(Boolean))];
+    const hit = sn.map((x) => seen.get(tk + '|' + x)).find(Boolean);
+    if (hit) { if (!hit.cover && r.cover) hit.cover = r.cover; if (!hit.desc && r.desc) hit.desc = r.desc; if (!hit.year && r.year) hit.year = r.year; continue; }
+    sn.forEach((x) => seen.set(tk + '|' + x, r)); out.push(r);
+  }
+  return out;
+}
+
 // ---- reading dump files --------------------------------------------------------------------------------------------
 async function* lines(file) {
   let stream = fs.createReadStream(file);
@@ -142,7 +166,8 @@ async function build(o) {
     });
   }
   recs.sort((a, b) => b.pop - a.pop);
-  recs = recs.slice(0, max);
+  const before = recs.length; recs = dedupe(recs).slice(0, max);
+  log(`duplicates removed: ${before - Math.min(before, recs.length)} (before trimming to ${max})`);
   const N = recs.length;
   const df = (get) => { const m = new Map(); for (const r of recs) for (const t of new Set(get(r))) m.set(t, (m.get(t) || 0) + 1); return m; };
   const tags = recs.map((r) => r.subjects.map(clean).filter((t) => t && t.length <= 40 && !JUNK.test(t)));
@@ -168,7 +193,7 @@ const toJs = (res, source) => 'window.BOOKS_CATALOG=' + JSON.stringify({
   cols: ['key', 'title', 'year', 'authors', 'genres', 'themes', 'people', 'rating', 'pop', 'cover', 'desc'], books: res.books,
 }) + ';\n';
 
-module.exports = { build, toJs, genresOf, clean, describe };
+module.exports = { build, toJs, genresOf, clean, describe, dedupe, titleKey };
 
 if (require.main === module) {
   const a = process.argv.slice(2), arg = (n) => { const i = a.indexOf('--' + n); return i >= 0 ? a[i + 1] : undefined; };
