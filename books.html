@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>DOMEVO Books – Book picks that learn your taste</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0C0D10; --bar: rgba(12, 13, 16, 0.88); --surface: #14161B; --surface-2: #1B1E25; --surface-3: #242833;
+  --line: #2A2F3A; --line-soft: #20242D; --line-strong: #3A404E;
+  --fg: #ECEEF2; --fg-soft: #C3C8D2; --muted: #98A0AE; --faint: #707887;
+  --accent: #F5B33D; --accent-text: #F5B33D; --accent-fg: #17120A; --accent-soft: rgba(245, 179, 61, 0.13); --accent-line: rgba(245, 179, 61, 0.45);
+  --good: #5FD39A; --good-soft: rgba(95, 211, 154, 0.12); --bad: #F28B82; --bad-soft: rgba(242, 139, 130, 0.12);
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r-lg: 14px; --r-md: 10px; --r-sm: 8px;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #F4F5F8; --bar: rgba(244, 245, 248, 0.9); --surface: #FFFFFF; --surface-2: #F0F2F6; --surface-3: #E4E7EE;
+    --line: #D6DAE4; --line-soft: #E4E7EE; --line-strong: #B9BFCD;
+    --fg: #14161B; --fg-soft: #343A48; --muted: #566070; --faint: #727B8C;
+    --accent: #F0A81A; --accent-text: #85550A; --accent-fg: #1A1305; --accent-soft: rgba(240, 168, 26, 0.16); --accent-line: rgba(176, 116, 8, 0.55);
+    --good: #12794A; --good-soft: rgba(18, 121, 74, 0.1); --bad: #B53A2D; --bad-soft: rgba(181, 58, 45, 0.09);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F4F5F8; --bar: rgba(244, 245, 248, 0.9); --surface: #FFFFFF; --surface-2: #F0F2F6; --surface-3: #E4E7EE;
+  --line: #D6DAE4; --line-soft: #E4E7EE; --line-strong: #B9BFCD;
+  --fg: #14161B; --fg-soft: #343A48; --muted: #566070; --faint: #727B8C;
+  --accent: #F0A81A; --accent-text: #85550A; --accent-fg: #1A1305; --accent-soft: rgba(240, 168, 26, 0.16); --accent-line: rgba(176, 116, 8, 0.55);
+  --good: #12794A; --good-soft: rgba(18, 121, 74, 0.1); --bad: #B53A2D; --bad-soft: rgba(181, 58, 45, 0.09);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--bg); scroll-behavior: smooth; }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--fg); font: 400 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, p, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+::selection { background: var(--accent); color: var(--accent-fg); }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* top bar */
+.topbar { position: sticky; top: 0; z-index: 50; background: var(--bar); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line-soft); }
+.topbar-in { max-width: 1360px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; flex: none; }
+.brand-mark { width: 32px; height: 32px; border-radius: 9px; background: var(--accent); color: var(--accent-fg); display: grid; place-items: center; }
+.brand-mark svg { width: 18px; height: 18px; }
+.brand-name { font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.12em; }
+.seg { display: inline-flex; padding: 3px; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; flex: none; }
+.seg button { height: 30px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
+.seg button:hover { color: var(--fg); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+.search { position: relative; flex: 1; max-width: 520px; margin-inline: auto; }
+.search > svg { position: absolute; left: 14px; top: 20px; translate: 0 -50%; width: 16px; height: 16px; color: var(--faint); pointer-events: none; }
+.search input { width: 100%; height: 40px; padding: 0 14px 0 40px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-size: 0.9rem; }
+.search input::placeholder { color: var(--faint); }
+.search input:hover { border-color: var(--line-strong); }
+.search input:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.search input:disabled { opacity: 0.5; cursor: not-allowed; }
+.sugg { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 60; padding: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35); max-height: 380px; overflow-y: auto; }
+.sugg li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px 10px; border-radius: var(--r-sm); cursor: pointer; }
+.sugg li[aria-selected="true"], .sugg li[data-id]:hover { background: var(--accent-soft); }
+.sugg .th { width: 36px; height: 54px; border-radius: 4px; background: var(--surface-3); object-fit: cover; display: block; }
+.sugg .t { display: block; font-weight: 500; font-size: 0.9rem; overflow-wrap: anywhere; }
+.sugg .m { display: block; font-size: 0.75rem; color: var(--muted); }
+.sugg .none { display: block; grid-template-columns: 1fr; color: var(--muted); font-size: 0.875rem; cursor: default; }
+.readout { display: flex; align-items: center; gap: 14px; flex: none; font-size: 0.8125rem; color: var(--muted); }
+.readout b { color: var(--fg); font-family: var(--mono); font-weight: 500; margin-left: 4px; }
+.readout .sep { width: 1px; height: 16px; background: var(--line); }
+.icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; color: var(--muted); flex: none; }
+.icon-btn:hover { color: var(--fg); border-color: var(--line-strong); }
+.icon-btn svg { width: 17px; height: 17px; }
+
+/* layout */
+.layout { max-width: 1360px; width: 100%; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; flex: 1; }
+.col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--line-soft); border-radius: var(--r-lg); min-width: 0; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 18px 20px 0; }
+.card-h h2 { font-size: 1rem; font-weight: 600; letter-spacing: -0.005em; }
+.card-h .sub { font-size: 0.8125rem; color: var(--muted); text-align: right; }
+.card-b { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+.eyebrow { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.help { font-size: 0.8125rem; color: var(--muted); }
+.notice { background: var(--accent-soft); border-radius: var(--r-md); padding: 10px 14px; font-size: 0.875rem; }
+.notice.warn { background: var(--bad-soft); }
+.notice code { font-family: var(--mono); font-size: 0.85em; background: var(--surface-2); padding: 1px 6px; border-radius: 4px; }
+#setup { max-width: 1360px; width: 100%; margin: 20px auto 0; padding-inline: 24px; }
+
+/* seeds */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 34px; }
+.chip-seed { display: inline-flex; align-items: center; gap: 2px; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: 999px; padding: 3px 4px 3px 12px; font-size: 0.875rem; font-weight: 500; max-width: 100%; }
+.chip-seed span { overflow-wrap: anywhere; }
+.chip-seed button { border: 0; background: transparent; width: 26px; height: 26px; border-radius: 50%; line-height: 1; font-size: 1.05rem; color: var(--muted); }
+.chip-seed button:hover { background: var(--surface); color: var(--fg); }
+.row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill-btn { height: 30px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 0.8125rem; color: var(--fg-soft); }
+.pill-btn:hover:not(:disabled) { border-color: var(--accent-line); color: var(--accent-text); }
+.pill-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface-2); font-size: 0.875rem; font-weight: 600; transition: background 0.15s, border-color 0.15s; }
+.btn svg { width: 17px; height: 17px; flex: none; }
+.btn:hover:not(:disabled) { background: var(--surface-3); border-color: var(--line-strong); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.btn.primary:hover:not(:disabled) { background: var(--accent); filter: brightness(1.07); }
+.btn.like svg { color: var(--accent-text); }
+.btn.like:hover { border-color: var(--accent-line); background: var(--accent-soft); }
+.btn.done svg { color: var(--good); }
+.btn.done:hover { border-color: var(--good); background: var(--good-soft); }
+.btn.skip svg { color: var(--bad); }
+.btn.skip:hover { border-color: var(--bad); background: var(--bad-soft); }
+.btn[aria-pressed="true"].like { background: var(--accent-soft); border-color: var(--accent-line); }
+.btn[aria-pressed="true"].done { background: var(--good-soft); border-color: var(--good); }
+.btn[aria-pressed="true"].skip { background: var(--bad-soft); border-color: var(--bad); }
+.btn.ghost { background: transparent; }
+kbd { font-family: var(--mono); font-size: 0.6875rem; padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); }
+
+/* stage */
+#stageCard { overflow: hidden; }
+.stage-title { padding: 18px 20px 14px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.stage-title h1 { font-size: clamp(1.4rem, 2.2vw, 1.75rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; overflow-wrap: anywhere; }
+.badge { display: inline-block; font: 500 0.6875rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); border: 1px solid var(--accent-line); border-radius: 6px; padding: 4px 7px; flex: none; margin-top: 6px; }
+.panel-row { padding: 16px 20px; border-top: 1px solid var(--line-soft); display: flex; flex-direction: column; gap: 12px; }
+.panel-row-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.region { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--muted); }
+.region select { height: 32px; padding: 0 28px 0 10px; background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2398A0AE' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 9px center; border: 1px solid var(--line); border-radius: var(--r-sm); appearance: none; font-size: 0.8125rem; }
+.region select:hover { border-color: var(--line-strong); }
+#storeActionContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.store { display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 6px 12px 6px 8px; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface-2); color: var(--fg); text-decoration: none; transition: border-color 0.15s, background 0.15s; min-width: 0; }
+.store:hover { border-color: var(--accent-line); background: var(--surface-3); }
+.store .tile { width: 30px; height: 30px; flex: none; border-radius: 7px; background: var(--surface-3); display: grid; place-items: center; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em; }
+.store .name { display: flex; flex-direction: column; min-width: 0; font-size: 0.8125rem; font-weight: 600; line-height: 1.25; }
+.store .how { font-size: 0.6875rem; font-weight: 500; color: var(--good); }
+.store .go { margin-left: auto; color: var(--faint); font-size: 0.75rem; }
+.store:hover .go { color: var(--accent-text); }
+.store.unavail { opacity: 0.5; cursor: not-allowed; background: transparent; border-style: dashed; }
+.store.unavail:hover { background: transparent; border-color: var(--line); }
+.store.unavail .tile { background: var(--surface-2); color: var(--faint); }
+.store.unavail .name { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--faint); }
+#availNote { font-size: 0.75rem; color: var(--faint); }
+
+.media { position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+#mediaContainer { position: absolute; inset: 0; }
+.media img.poster { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media .noimg { width: 100%; height: 100%; display: grid; place-items: center; padding: 24px; text-align: center; background: linear-gradient(135deg, #20242D, #0C0D10); color: #98A0AE; font-weight: 600; font-size: 1.25rem; }
+.media .shade { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8, 9, 12, 0.92) 0%, rgba(8, 9, 12, 0.15) 55%, rgba(8, 9, 12, 0.25) 100%); }
+.play { position: absolute; inset: 0; width: 100%; background: none; border: 0; display: grid; place-items: center; }
+.play span { width: 68px; height: 68px; border-radius: 50%; background: var(--accent); color: var(--accent-fg); display: grid; place-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); transition: transform 0.18s ease; }
+.play:hover span { transform: scale(1.07); }
+.play svg { width: 28px; height: 28px; translate: 2px 0; }
+.chip-row { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px; border-radius: 999px; background: rgba(12, 13, 16, 0.78); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.12); color: #ECEEF2; font-size: 0.75rem; font-weight: 500; text-decoration: none; }
+a.chip:hover { border-color: var(--accent); }
+.live-chip { position: absolute; right: 14px; bottom: 14px; z-index: 5; }
+.live-chip button { border: 0; background: transparent; color: #98A0AE; width: 22px; height: 22px; border-radius: 50%; margin-right: -6px; font-size: 0.8rem; }
+.live-chip button:hover { color: #fff; background: rgba(255, 255, 255, 0.15); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; }
+.media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+.stage-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.875rem; color: var(--muted); }
+.meta .dotsep { width: 3px; height: 3px; border-radius: 50%; background: var(--faint); }
+.meta .who { color: var(--fg); flex-basis: 100%; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); font-size: 0.75rem; font-weight: 500; color: var(--muted); }
+#stageOverview { color: var(--fg-soft); font-size: 0.9375rem; line-height: 1.65; max-width: 68ch; }
+.why { background: var(--surface-2); border-radius: var(--r-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; font-size: 0.875rem; }
+.why ul { display: flex; flex-direction: column; gap: 3px; color: var(--fg-soft); }
+.why li::before { content: "•"; color: var(--accent-text); margin-right: 8px; }
+.why .via { font-size: 0.8125rem; color: var(--muted); }
+
+/* taste profile */
+.tabs { display: flex; gap: 4px; padding: 4px; background: var(--bg); border: 1px solid var(--line-soft); border-radius: var(--r-md); }
+.tab { flex: 1; height: 34px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--muted); font-size: 0.8125rem; font-weight: 600; }
+.tab:hover { color: var(--fg); }
+.tab.is-active { background: var(--surface-3); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+#genomeList { display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: grid; grid-template-columns: minmax(100px, 160px) minmax(0, 1fr) 62px; align-items: center; gap: 14px; font-size: 0.875rem; }
+.bar-row.zero .k { color: var(--faint); }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+.bar > i { display: block; height: 100%; border-radius: 99px; background: var(--accent); transition: width 0.45s ease; }
+.bar-row .v { text-align: right; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.bar-row .avoid { color: var(--bad); }
+
+/* picks */
+#picks { display: flex; flex-direction: column; gap: 4px; }
+.cand { display: grid; grid-template-columns: 24px 96px minmax(0, 1fr); gap: 12px; align-items: center; width: 100%; padding: 8px; text-align: left; background: transparent; border: 1px solid transparent; border-radius: var(--r-md); }
+.cand:hover { background: var(--surface-2); border-color: var(--line); }
+.cand[aria-current="true"] { background: var(--accent-soft); border-color: var(--accent-line); }
+.cand .n { font-family: var(--mono); font-size: 0.8125rem; color: var(--faint); text-align: center; }
+.cand img, .cand .ph { width: 96px; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--r-sm); background: var(--surface-3); display: block; }
+.cand .t { display: block; font-size: 0.9rem; font-weight: 600; line-height: 1.3; overflow-wrap: anywhere; }
+.cand .d { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--muted); flex-wrap: wrap; }
+.tag { font: 500 0.625rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 6px; border-radius: 5px; border: 1px solid var(--line); }
+.tag.love { color: var(--good); border-color: var(--good); }
+.tag.no { color: var(--bad); border-color: var(--bad); }
+.tag.wild { color: var(--accent-text); border-color: var(--accent-line); }
+
+/* services, saved, settings */
+.svc { display: flex; flex-wrap: wrap; gap: 8px; }
+.svc button { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 6px; border-radius: 999px; border: 1px solid var(--line); background: transparent; font-size: 0.8125rem; font-weight: 500; }
+.svc button .tile { width: 22px; height: 22px; border-radius: 6px; background: var(--surface-3); display: grid; place-items: center; font-size: 0.625rem; font-weight: 700; }
+.svc button:hover { border-color: var(--line-strong); }
+.svc button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent-line); }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 0.875rem; }
+.check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.saved-item { display: grid; grid-template-columns: 44px minmax(0, 1fr) 32px; gap: 12px; align-items: center; }
+.saved-item .open { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left; background: transparent; border: 0; padding: 0; grid-column: 1 / 3; }
+.saved-item img, .saved-item .ph { width: 44px; height: 64px; border-radius: 5px; object-fit: cover; background: var(--surface-3); display: block; }
+.saved-item .t { font-size: 0.875rem; font-weight: 600; overflow-wrap: anywhere; }
+.saved-item .m { font-size: 0.75rem; color: var(--muted); }
+.saved-item .rm { width: 32px; height: 32px; border-radius: 50%; border: 0; background: transparent; color: var(--muted); font-size: 1.1rem; }
+.saved-item .rm:hover { background: var(--surface-2); color: var(--fg); }
+.setting { display: flex; flex-direction: column; gap: 8px; }
+.setting-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.875rem; font-weight: 500; }
+.setting-h .mono { color: var(--accent-text); font-size: 0.8125rem; }
+.setting small { color: var(--muted); font-size: 0.75rem; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 20px; background: transparent; cursor: pointer; }
+input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: var(--surface-3); }
+input[type=range]::-moz-range-track { height: 6px; border-radius: 99px; background: var(--surface-3); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: -6px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--accent-line); }
+input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); }
+
+/* learning */
+.wrow { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr) 2.8rem; gap: 10px; align-items: center; font-size: 0.875rem; }
+.track { position: relative; height: 8px; background: var(--surface-2); border-radius: 5px; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 5px; transition: width 0.4s ease; }
+.tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg); border-radius: 1px; opacity: 0.55; }
+.wval { text-align: right; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stat { background: var(--surface-2); border-radius: var(--r-md); padding: 8px 10px; }
+.stat b { display: block; font: 500 1.15rem/1.2 var(--mono); }
+.stat span { font-size: 0.75rem; color: var(--muted); }
+.result-box { border-radius: var(--r-md); padding: 10px 12px; background: var(--surface-2); font-size: 0.875rem; color: var(--fg-soft); }
+.result-box.ok { background: var(--good-soft); }
+.spark text { font: 400 10px var(--mono); fill: var(--muted); }
+.hist { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.hist th { text-align: left; font: 500 0.6875rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 4px 6px 4px 0; }
+.hist td { padding: 5px 6px 5px 0; border-top: 1px solid var(--line-soft); font-variant-numeric: tabular-nums; }
+.how { font-size: 0.8125rem; color: var(--muted); display: flex; flex-direction: column; gap: 8px; }
+.linkbtn { border: 0; background: transparent; color: var(--muted); text-decoration: underline; padding: 6px 0; min-height: 36px; text-align: left; font-size: 0.8125rem; }
+.linkbtn:hover { color: var(--fg); }
+
+/* log */
+#evolutionLog { display: flex; flex-direction: column; max-height: 300px; overflow-y: auto; }
+.log-row { display: grid; grid-template-columns: 62px 78px minmax(0, 1fr); gap: 10px; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 0.8125rem; line-height: 1.45; }
+.log-row:first-child { border-top: 0; }
+.log-row .tm { font-family: var(--mono); font-size: 0.75rem; color: var(--faint); }
+.log-row .ty { font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-text); padding-top: 1px; }
+.log-row .tx { color: var(--fg-soft); overflow-wrap: anywhere; }
+
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--surface-3); border-top-color: var(--accent); animation: spin 0.8s linear infinite; display: inline-block; vertical-align: -3px; margin-right: 8px; }
+
+.search-slot { flex: 1; min-width: 0; display: flex; }
+.search-slot .search { flex: 1; }
+/* First visit: only the seed card shows, with a big search bar and film tiles. The rest appears once there are picks. */
+body.welcome .readout, body.welcome aside.col, body.welcome .col > .card:not(#seedCard), body.welcome #stageCard { display: none !important; }
+body.welcome .topbar .search-slot { display: none; }
+body.welcome .layout { display: block; max-width: 860px; padding-top: 40px; }
+body.welcome #seedCard { border: 0; background: transparent; }
+body.welcome #seedCard .card-h { flex-direction: column; align-items: center; gap: 6px; padding: 0 0 8px; text-align: center; }
+body.welcome #seedCard .card-h h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 700; letter-spacing: -0.02em; }
+body.welcome #seedCard .card-h .sub { font-size: 1rem; text-align: center; }
+body.welcome #seedCard .card-b { gap: 18px; padding-inline: 0; }
+body.welcome #heroSearch .search { max-width: none; }
+body.welcome #heroSearch .search input { height: 56px; font-size: 1.05rem; padding-left: 50px; border-width: 2px; border-color: var(--accent-line); }
+body.welcome #heroSearch .search > svg { left: 18px; top: 28px; width: 20px; height: 20px; }
+body.welcome .chips, body.welcome .quick, body.welcome .row { justify-content: center; }
+#heroSearch:empty { display: none; }
+body.welcome #seedCard .card-b { display: flex; flex-direction: column; }
+body.welcome #heroSearch { order: 1; } body.welcome .chips { order: 2; } body.welcome #seedCard .row { order: 3; } body.welcome #banner { order: 3; } body.welcome #tilesWrap { order: 4; } body.welcome .quick { order: 5; }
+#tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 12px; margin-top: 10px; }
+.tile { position: relative; padding: 0; border: 2px solid transparent; border-radius: var(--r-md); background: var(--surface-2); overflow: hidden; aspect-ratio: 2 / 3; color: var(--fg); text-align: left; transition: transform 0.15s ease, border-color 0.15s ease; }
+.tile:hover:not(:disabled) { transform: translateY(-2px); border-color: var(--accent-line); }
+.tile:disabled { opacity: 0.5; cursor: not-allowed; }
+.tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tile .cap { position: absolute; inset: auto 0 0 0; padding: 22px 8px 8px; font-size: 0.75rem; font-weight: 600; line-height: 1.2; color: #fff; background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); overflow-wrap: anywhere; }
+.tile .noimg { position: absolute; inset: 0; display: grid; place-items: center; padding: 10px; text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.tile[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.tile[aria-pressed="true"]::after { content: "✓"; position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-fg); display: grid; place-items: center; font-size: 0.85rem; font-weight: 700; }
+@keyframes spin { to { rotate: 360deg; } }
+footer { max-width: 1360px; width: 100%; margin: 0 auto; padding: 8px 24px 32px; color: var(--faint); font-size: 0.75rem; }
+
+@media (max-width: 1020px) {
+  .readout { display: none; }
+  /* one column: flatten both columns and order the cards so the picks sit right under the seeds */
+  .layout { display: flex; flex-direction: column; align-items: stretch; gap: 24px; }
+  .col { display: contents; }
+  [aria-labelledby="seedH"] { order: 1; } #picksCard { order: 2; } #stageCard { order: 3; } [aria-labelledby="tasteH"] { order: 4; }
+  [aria-labelledby="svcH"] { order: 5; } [aria-labelledby="listH"] { order: 6; } [aria-labelledby="setH"] { order: 7; } [aria-labelledby="learnH"] { order: 8; } [aria-labelledby="logH"] { order: 9; }
+}
+@media (max-width: 720px) {
+  .topbar-in { flex-wrap: wrap; padding: 10px 16px; gap: 10px 12px; }
+  .search { order: 3; flex-basis: 100%; max-width: none; }
+  .brand-name { display: none; }
+  .layout { padding: 16px; gap: 16px; }
+  #setup { padding-inline: 16px; }
+  .play span { width: 56px; height: 56px; }
+  .bar-row { grid-template-columns: 92px minmax(0, 1fr) 56px; gap: 10px; }
+  .log-row { grid-template-columns: 56px minmax(0, 1fr); } .log-row .ty, .log-row .tx { grid-column: 2; }
+  .cand { grid-template-columns: 20px 84px minmax(0, 1fr); gap: 10px; } .cand img, .cand .ph { width: 84px; }
+  .keys { display: none; }
+  #tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* books */
+.book { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; padding: 18px 20px 4px; }
+.book .cover { width: 150px; aspect-ratio: 2 / 3; border-radius: var(--r-sm); background: linear-gradient(135deg, var(--surface-3), var(--surface-2)); object-fit: cover; display: grid; place-items: center; padding: 10px; text-align: center; font-weight: 600; font-size: 0.85rem; color: var(--muted); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); }
+.book .info { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.book .stage-body { padding: 0; }
+.cand img { aspect-ratio: 2 / 3; object-fit: cover; }
+.cand img, .cand .ph { height: auto; }
+.saved-item img { aspect-ratio: 2 / 3; object-fit: cover; }
+@media (max-width: 720px) { .book { grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding: 16px 16px 4px; } .book .cover { width: 96px; font-size: 0.7rem; } }
+
+.cand { grid-template-columns: 24px 52px minmax(0, 1fr); }
+.cand img, .cand .ph { width: 52px; aspect-ratio: 2 / 3; }
+@media (max-width: 720px) { .cand { grid-template-columns: 20px 52px minmax(0, 1fr); } .cand img, .cand .ph { width: 52px; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM4 20.5A2.5 2.5 0 006.5 18H20v3H6.5A2.5 2.5 0 014 20.5z"/></svg></div>
+      <span class="brand-name">DOMEVO <span style="font-weight:500;letter-spacing:0.06em;color:var(--muted)">BOOKS</span></span>
+    </div>
+
+    <div id="hdrSearch" class="search-slot"><form id="searchForm" class="search" role="search" onsubmit="return false">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" id="searchInput" role="combobox" aria-expanded="false" aria-controls="sugg" aria-autocomplete="list" aria-label="Search for a book you love" placeholder="Search a book you love to add it" autocomplete="off">
+      <ul class="sugg" id="sugg" role="listbox" hidden></ul>
+    </form></div>
+
+    <div class="readout" aria-label="Session status">
+      <span>List<b id="listNo">0</b></span>
+      <span class="sep" aria-hidden="true"></span>
+      <span>Rated<b id="ratedCount">0/10</b></span>
+    </div>
+
+    <button type="button" class="icon-btn" id="themeBtn" aria-label="Theme: auto" title="Theme: auto"></button>
+  </div>
+</header>
+
+<div id="setup" hidden></div>
+
+<main class="layout">
+  <section class="col" aria-label="Now featuring">
+
+    <section class="card" id="seedCard" aria-labelledby="seedH">
+      <div class="card-h"><h2 id="seedH">What do you love to read?</h2><span class="sub" id="seedSub">2 to 5</span></div>
+      <div class="card-b">
+        <div id="heroSearch"></div>
+        <div id="tilesWrap" hidden><span class="help" id="tilesHelp"></span><div class="tiles" id="tiles"></div></div>
+        <div class="chips" id="chips" aria-live="polite"></div>
+        <div class="quick" id="quick"></div>
+        <div class="row">
+          <button type="button" class="btn primary" id="go">Get my picks</button>
+          <span class="help" id="pickNote" aria-live="polite"></span>
+        </div>
+        <div id="banner"></div>
+      </div>
+    </section>
+
+    <article id="stageCard" class="card" hidden>
+      <div class="book">
+        <div id="coverBox"></div>
+        <div class="info">
+          <div class="stage-title" style="padding:0"><h1 id="stageTitleFull">Title</h1><span class="badge" id="stageBadge" hidden>Wildcard</span></div>
+          <div id="stageMetaInfo" class="meta"></div>
+          <div id="stageCast" class="pills"></div>
+          <p id="stageOverview" style="color:var(--fg-soft);font-size:0.9375rem;line-height:1.65"></p>
+        </div>
+      </div>
+
+      <div class="panel-row" id="teachRow">
+        <div class="panel-row-h">
+          <span class="eyebrow">Teach the algorithm</span>
+          <span class="help keys"><kbd>L</kbd> like &nbsp;<kbd>R</kbd> read it &nbsp;<kbd>N</kbd> not for me &nbsp;<kbd>→</kbd> next</span>
+        </div>
+        <div class="actions" role="group" aria-label="Rate this book">
+          <button type="button" class="btn like" id="rLove" data-r="love" aria-pressed="false" title="Like: find more like this (L)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11v9H4v-9h3zm0 0l4-7a2 2 0 012 2v3h5.2a2 2 0 012 2.3l-1.2 7A2 2 0 0117 20H7"/></svg>Like
+          </button>
+          <button type="button" class="btn done" id="rWatched" data-r="watched" aria-pressed="false" title="Read it and enjoyed it: counts a little more (R)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>Read it
+          </button>
+          <button type="button" class="btn skip" id="rNo" data-r="no" aria-pressed="false" title="Not for me: never show it again (N)">
+            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7"/></svg>Not for me
+          </button>
+          <button type="button" class="btn ghost" id="nextBtn" title="Skip without rating (right arrow)">Next →</button>
+        </div>
+      </div>
+
+      <div class="panel-row">
+        <div class="panel-row-h"><span class="eyebrow">Find this book</span></div>
+        <div id="storeActionContainer"></div>
+        <p id="availNote">These open a search on each site. Book data and covers from Open Library.</p>
+      </div>
+
+      <div class="stage-body" style="padding-top:4px">
+        <div class="row"><button type="button" class="btn" id="saveBtn" aria-pressed="false"></button></div>
+        <div class="why" id="whyBox" hidden></div>
+      </div>
+    </article>
+
+    <section class="card" aria-labelledby="tasteH">
+      <div class="card-h"><h2 id="tasteH">Your taste profile</h2><span class="sub" id="tasteSub">Updates as you rate</span></div>
+      <div class="card-b">
+        <div class="tabs" role="tablist" aria-label="Taste profile category">
+          <button type="button" role="tab" aria-selected="true" data-tab="genres" id="tabGenres" class="tab is-active">Genres</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="directors" id="tabDirectors" class="tab">Authors</button>
+          <button type="button" role="tab" aria-selected="false" data-tab="eras" id="tabEras" class="tab">Eras</button>
+        </div>
+        <div id="genomeList"></div>
+        <p class="help" id="tasteNote"></p>
+      </div>
+    </section>
+  </section>
+
+  <aside class="col" aria-label="Recommendations and settings">
+
+    <section class="card" aria-labelledby="picksH" id="picksCard" hidden>
+      <div class="card-h"><h2 id="picksH">Your top 10</h2><span class="sub" id="picksSub"></span></div>
+      <div class="card-b">
+        <div id="picks"></div>
+        <button type="button" class="btn" id="newList">Rate, learn, new list</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="listH">
+      <div class="card-h"><h2 id="listH">Reading list</h2><span class="sub" id="listSub"></span></div>
+      <div class="card-b"><div id="savedList"></div></div>
+    </section>
+
+    <section class="card" aria-labelledby="setH">
+      <div class="card-h"><h2 id="setH">Settings</h2></div>
+      <div class="card-b">
+        <div class="setting">
+          <div class="setting-h"><label for="wildSlider">Variety (wildcards per list)</label><span id="wildVal" class="mono">2</span></div>
+          <input type="range" min="0" max="4" step="1" value="2" id="wildSlider">
+          <small>Wildcards are well-liked books outside your usual taste. They help the algorithm learn what else you enjoy.</small>
+        </div>
+        <div class="setting">
+          <div class="setting-h"><label for="popSlider">Search effort</label><span id="popVal" class="mono">60</span></div>
+          <input type="range" min="30" max="120" step="30" value="60" id="popSlider">
+          <small>The size of the genetic algorithm's population. Higher searches wider but takes longer.</small>
+        </div>
+        <label class="check"><input type="checkbox" id="useGA" checked><span>Balance each list with the genetic algorithm (turn off to compare with a plain top 10)</span></label>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="learnH">
+      <div class="card-h"><h2 id="learnH">How it learns</h2></div>
+      <div class="card-b">
+        <div>
+          <h3 class="eyebrow">What counts when comparing books</h3>
+          <div id="weights" style="display:flex;flex-direction:column;gap:9px;margin-top:10px"></div>
+          <p class="help" style="margin-top:8px">The dark tick marks the starting value.</p>
+        </div>
+        <div class="stats" id="stats"></div>
+        <button type="button" class="btn" id="evolve">Evolve weights now</button>
+        <div id="evolve-result" class="result-box" aria-live="polite">Rate books in your list, then evolve the weights from your ratings.</div>
+        <div id="sparks" style="display:flex;flex-direction:column;gap:14px"></div>
+        <div id="history"></div>
+        <div class="how">
+          <p><b>Likes</b> join your taste profile and widen the search. <b>Not for me</b> books never come back. That works from your first rating.</p>
+          <p>The weight evolution needs more evidence (12+ ratings). It only adopts new weights if they also win on ratings held back for testing, so with one reader it often keeps the current ones.</p>
+          <p>Everything is stored in this browser. There is no account and nothing is sent anywhere.</p>
+        </div>
+        <button class="linkbtn" id="reset" type="button">Start over</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="logH">
+      <div class="card-h"><h2 id="logH">Activity</h2></div>
+      <div class="card-b"><div id="evolutionLog"></div></div>
+    </section>
+  </aside>
+</main>
+
+<footer>Book data and cover images from <a href="https://openlibrary.org" target="_blank" rel="noopener noreferrer" style="color:inherit">Open Library</a>, an Internet Archive project. <span id="catInfo"></span></footer>
+<script>/* Taste Genome engine: similarity, list GA, weight GA. Pure logic, no DOM, no network.
+   Works on a Catalog of film objects, so the film data can come from anywhere (here: TMDB).
+
+   A film is: { id, title, year, rating, q, director, genres[], cast[], themes[] }
+     q is a 0..1 quality score. themes are keywords. */
+(function (root) {
+  'use strict';
+
+  var GROUPS = ['Genre', 'Director', 'Cast', 'Themes', 'Era', 'Quality'];
+  var INIT_W = [0.28, 0.14, 0.12, 0.24, 0.08, 0.14];
+
+  function inter(a, b) { var n = 0; for (var i = 0; i < a.length; i++) if (b.indexOf(a[i]) >= 0) n++; return n; }
+  function jac(a, b) { if (!a.length || !b.length) return 0; var k = inter(a, b); return k / (a.length + b.length - k); }
+  function simVec(A, B) {
+    return [
+      A.genres.length && B.genres.length ? inter(A.genres, B.genres) / Math.sqrt(A.genres.length * B.genres.length) : 0,
+      A.director && A.director === B.director ? 1 : 0,
+      jac(A.cast, B.cast),
+      jac(A.themes, B.themes),
+      A.year && B.year ? Math.max(0, 1 - Math.abs(A.year - B.year) / 30) : 0
+    ];
+  }
+
+  // A growing set of films with lazily cached pairwise similarity.
+  function Catalog(opts) {
+    this.films = []; this.index = new Map(); this.cache = new Map();
+    opts = opts || {};   // wording and thresholds, so the same engine can rank books as well as films
+    this.person = opts.person || 'director'; this.group = opts.group || 'Shares'; this.hiRating = opts.hiRating == null ? 8.0 : opts.hiRating; this.hiVotes = opts.hiVotes == null ? 1000 : opts.hiVotes;
+  }
+  Catalog.prototype.add = function (f) {
+    if (this.index.has(f.id)) return this.index.get(f.id);
+    var i = this.films.length; this.films.push(f); this.index.set(f.id, i); return i;
+  };
+  Catalog.prototype.idx = function (id) { return this.index.has(id) ? this.index.get(id) : -1; };
+  Catalog.prototype.sims = function (a, b) {
+    var k = a * 1048576 + b, v = this.cache.get(k);
+    if (!v) {
+      if (this.cache.size > 400000) this.cache.clear();   // bound memory on big catalogues
+      v = simVec(this.films[a], this.films[b]); this.cache.set(k, v);
+    }
+    return v;
+  };
+  Catalog.prototype.sim = function (a, b, g) { return this.sims(a, b)[g]; };
+
+  function mulberry32(s) {
+    return function () {
+      s |= 0; s = s + 0x6D2B79F5 | 0;
+      var t = Math.imul(s ^ s >>> 15, 1 | s);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function gauss(rng) { return Math.sqrt(-2 * Math.log(rng() + 1e-12)) * Math.cos(2 * Math.PI * rng()); }
+  function normW(w) {
+    var s = 0, out = w.map(function (x) { var v = Math.abs(x) + 1e-6; s += v; return v; });
+    return out.map(function (x) { return x / s; });
+  }
+
+  // Score every film against every profile film separately; a film's score is its best match.
+  function scoreAll(C, profile, w, excluded) {
+    var N = C.films.length;
+    var per = profile.map(function (s) {
+      var row = new Float64Array(N);
+      for (var f = 0; f < N; f++) {
+        if (excluded.has(f)) { row[f] = -Infinity; continue; }
+        var v = C.sims(s, f);
+        row[f] = w[0] * v[0] + w[1] * v[1] + w[2] * v[2] + w[3] * v[3] + w[4] * v[4] + w[5] * C.films[f].q;
+      }
+      return row;
+    });
+    var score = new Float64Array(N), who = new Int32Array(N);
+    for (var f2 = 0; f2 < N; f2++) {
+      var best = -Infinity, bi = 0;
+      for (var s2 = 0; s2 < per.length; s2++) if (per[s2][f2] > best) { best = per[s2][f2]; bi = s2; }
+      score[f2] = best; who[f2] = bi;
+    }
+    return { per: per, score: score, who: who };
+  }
+
+  // List GA: random-key encoding, the n largest keys are the chosen films.
+  // Fitness = relevance + variety + how well every profile film is covered.
+  function listGA(C, cand, per, score, n, rng, o) {
+    o = o || {};
+    var K = cand.length;
+    if (K <= n) return { picks: cand.slice(), curve: [] };
+    var P = o.pop || 60, G = o.gens || 40, ld = o.lamDiv == null ? 0.3 : o.lamDiv, lc = o.lamCov == null ? 0.5 : o.lamCov;
+    var sc = cand.map(function (f) { return score[f]; });
+    var mn = Math.min.apply(null, sc), mx = Math.max.apply(null, sc);
+    var r = sc.map(function (v) { return (v - mn) / (mx - mn || 1); });
+    var psn = per.map(function (row) {
+      var v = cand.map(function (f) { return row[f]; });
+      var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
+      return v.map(function (x) { return (x - lo) / (hi - lo || 1); });
+    });
+    var D = new Float32Array(K * K);
+    for (var i = 0; i < K; i++) for (var j = 0; j < K; j++)
+      D[i * K + j] = i === j ? 0 : 0.5 * C.sim(cand[i], cand[j], 0) + 0.5 * C.sim(cand[i], cand[j], 3);
+
+    function top(keys) {
+      var idx = []; for (var i2 = 0; i2 < K; i2++) idx.push(i2);
+      idx.sort(function (x, y) { return keys[y] - keys[x]; });
+      return idx.slice(0, n);
+    }
+    function fit(idx) {
+      var rel = 0, k, m, a1;
+      for (k = 0; k < n; k++) rel += r[idx[k]];
+      rel /= n;
+      var ds = 0;
+      for (k = 0; k < n; k++) for (m = 0; m < n; m++) if (k !== m) ds += D[idx[k] * K + idx[m]];
+      var div = 1 - ds / (n * (n - 1));
+      var cov = 0;
+      for (a1 = 0; a1 < psn.length; a1++) {
+        var best = 0; for (k = 0; k < n; k++) if (psn[a1][idx[k]] > best) best = psn[a1][idx[k]];
+        cov += best;
+      }
+      cov /= psn.length;
+      return rel + ld * div + lc * cov;
+    }
+    var pop = [];
+    for (var p = 0; p < P; p++) pop.push(p === 0 ? r.slice() : r.map(function (x) { return x + gauss(rng) * 0.3; }));
+    var curve = [], fits;
+    for (var g = 0; g < G; g++) {
+      fits = pop.map(function (kk) { return fit(top(kk)); });
+      var order = fits.map(function (_, ix) { return ix; }).sort(function (x, y) { return fits[y] - fits[x]; });
+      curve.push(fits[order[0]]);
+      var next = [pop[order[0]], pop[order[1]]];
+      var tour = function () {
+        var b = Math.floor(rng() * P);
+        for (var t = 0; t < 2; t++) { var c = Math.floor(rng() * P); if (fits[c] > fits[b]) b = c; }
+        return pop[b];
+      };
+      while (next.length < P) {
+        var p1 = tour(), p2 = tour(), child = new Array(K);
+        for (var q = 0; q < K; q++) {
+          child[q] = rng() < 0.5 ? p1[q] : p2[q];
+          if (rng() < 0.1) child[q] += gauss(rng) * 0.1;
+        }
+        next.push(child);
+      }
+      pop = next;
+    }
+    fits = pop.map(function (kk) { return fit(top(kk)); });
+    var bi = 0; for (var z = 1; z < P; z++) if (fits[z] > fits[bi]) bi = z;
+    var chosen = top(pop[bi]).map(function (ix) { return cand[ix]; });
+    chosen.sort(function (x, y) { return score[y] - score[x]; });
+    return { picks: chosen, curve: curve };
+  }
+
+  // Human-readable reasons a film matches a given profile film.
+  function explain(C, seed, f, w) {
+    var A = C.films[seed], B = C.films[f], v = C.sims(seed, f), out = [], c = [];
+    if (v[1] === 1) c.push([w[1] + 0.2, 'Same ' + C.person + ', ' + B.director]);
+    var th = A.themes.filter(function (t) { return B.themes.indexOf(t) >= 0; });
+    if (th.length) c.push([w[3] * v[3] + 0.05, 'Shared themes: ' + th.slice(0, 4).join(', ')]);
+    var ge = A.genres.filter(function (t) { return B.genres.indexOf(t) >= 0; });
+    if (ge.length) c.push([w[0] * v[0], 'Genre overlap: ' + ge.join(', ')]);
+    var ca = A.cast.filter(function (t) { return B.cast.indexOf(t) >= 0; });
+    if (ca.length) c.push([w[2] * v[2] + 0.1, C.group + ' ' + ca.slice(0, 2).join(' and ')]);
+    if (v[4] > 0.75) c.push([w[4] * v[4] * 0.5, 'Same era (' + B.year + ')']);
+    if (B.rating >= C.hiRating && B.votes >= C.hiVotes) c.push([w[5] * B.q * 0.5, 'Very highly rated (' + B.rating.toFixed(1) + ')']);
+    c.sort(function (x, y) { return y[0] - x[0]; });
+    for (var i = 0; i < c.length && out.length < 3; i++) out.push(c[i][1]);
+    return out;
+  }
+
+  // One recommendation round: 10 films = (10 - wild) GA-balanced picks plus `wild` exploration wildcards (default 2, max 4).
+  // profile and excluded use catalog indices. Returned items use catalog indices too.
+  function recommend(C, profile, w, excluded, rng, o) {
+    o = o || {};
+    var N = C.films.length;
+    var sc = scoreAll(C, profile, w, excluded);
+    var idx = []; for (var f = 0; f < N; f++) if (sc.score[f] > -Infinity) idx.push(f);
+    idx.sort(function (x, y) { return sc.score[y] - sc.score[x]; });
+    var wild = o.wild == null ? 2 : Math.max(0, Math.min(4, Math.round(o.wild)));
+    var cand = idx.slice(0, o.K || 40), nGA = 10 - wild, ga = null, picks;
+    if (o.useGA === false) { picks = cand.slice(0, nGA); }
+    else { ga = listGA(C, cand, sc.per, sc.score, nGA, rng, o); picks = ga.picks; }
+    var items = picks.map(function (f2) {
+      return { id: f2, wildcard: false, seed: profile[sc.who[f2]], why: explain(C, profile[sc.who[f2]], f2, w) };
+    });
+    // wildcards: stretch picks from the mid-ranked, well-regarded films
+    var minR = o.minRating == null ? 7.0 : o.minRating, minV = o.minVotes == null ? 500 : o.minVotes;
+    var okFilm = function (f3) { var m = C.films[f3]; return picks.indexOf(f3) < 0 && m.rating >= minR && m.votes >= minV; };
+    var pool = idx.slice(40, 130).filter(okFilm);
+    if (pool.length < 2) pool = idx.slice(10).filter(okFilm);
+    for (var k = 0; k < wild && pool.length; k++) {
+      var wi = Math.floor(rng() * pool.length), wf = pool.splice(wi, 1)[0];
+      var pos = 3 + Math.floor(rng() * Math.max(1, Math.min(7 + k, items.length - 2)));
+      items.splice(Math.min(pos, items.length), 0, {
+        id: wf, wildcard: true, seed: profile[sc.who[wf]],
+        why: ['Wildcard: outside your usual lane, included to learn what else you like']
+      });
+    }
+    return { items: items, curve: ga ? ga.curve : [] };
+  }
+
+  // What the liked and rejected films have in common: counts per genre, director and decade.
+  // liked / rejected are catalog indices. The UI turns the counts into shares.
+  function taste(C, liked, rejected) {
+    function tally(list) {
+      var g = {}, d = {}, e = {};
+      list.forEach(function (i) {
+        var f = C.films[i]; if (!f) return;
+        f.genres.forEach(function (x) { g[x] = (g[x] || 0) + 1; });
+        if (f.director) d[f.director] = (d[f.director] || 0) + 1;
+        if (f.year) { var dec = Math.floor(f.year / 10) * 10; e[dec] = (e[dec] || 0) + 1; }
+      });
+      return { genres: g, directors: d, eras: e, n: list.length };
+    }
+    return { liked: tally(liked), rejected: tally(rejected) };
+  }
+
+  // ---- learning from ratings -------------------------------------------------
+  // A log item is self-contained: { sims: [[5 group sims per profile film]], q, label: 1|0, wt }
+  function makeItem(C, profile, f, label, wt) {
+    return { sims: profile.map(function (s) { return C.sims(s, f).slice(); }), q: C.films[f].q, label: label, wt: wt };
+  }
+  function itemScore(it, w) {
+    var best = -Infinity;
+    for (var s = 0; s < it.sims.length; s++) {
+      var v = w[0] * it.sims[s][0] + w[1] * it.sims[s][1] + w[2] * it.sims[s][2] + w[3] * it.sims[s][3] + w[4] * it.sims[s][4];
+      if (v > best) best = v;
+    }
+    return best + w[5] * it.q;
+  }
+  // Pairwise win rate: how often a film the viewer loved outscores one they rejected.
+  function fitness(items, w) {
+    var pos = [], neg = [], i, j;
+    for (i = 0; i < items.length; i++) {
+      var sc = itemScore(items[i], w);
+      (items[i].label === 1 ? pos : neg).push([sc, items[i].wt]);
+    }
+    var num = 0, den = 0;
+    for (i = 0; i < pos.length; i++) for (j = 0; j < neg.length; j++) {
+      var pw = pos[i][1] * neg[j][1];
+      den += pw;
+      num += pw * (pos[i][0] > neg[j][0] ? 1 : pos[i][0] === neg[j][0] ? 0.5 : 0);
+    }
+    return den ? num / den : 0.5;
+  }
+  function l1(a, b) { var s = 0; for (var i = 0; i < a.length; i++) s += Math.abs(a[i] - b[i]); return s; }
+
+  function evolveWeights(items, champion, rng, o) {
+    o = o || {};
+    var P = o.pop || 40, G = o.gens || 40, lam = o.lambda == null ? 0.05 : o.lambda;
+    var pop = [champion.slice()], i;
+    for (i = 1; i < P; i++) {
+      if (i < P / 2) pop.push(normW(champion.map(function (x) { return x + gauss(rng) * 0.08; })));
+      else pop.push(normW(champion.map(function () { return -Math.log(rng() + 1e-9); })));
+    }
+    var curve = [], fits;
+    var F = function (w) { return fitness(items, w) - lam * l1(w, champion); };   // gentle pull toward current weights
+    for (var g = 0; g < G; g++) {
+      fits = pop.map(F);
+      var order = fits.map(function (_, ix) { return ix; }).sort(function (x, y) { return fits[y] - fits[x]; });
+      curve.push(fitness(items, pop[order[0]]));
+      var next = [pop[order[0]], pop[order[1]]];
+      var tour = function () {
+        var b = Math.floor(rng() * P);
+        for (var t = 0; t < 2; t++) { var c = Math.floor(rng() * P); if (fits[c] > fits[b]) b = c; }
+        return pop[b];
+      };
+      while (next.length < P) {
+        var p1 = tour(), p2 = tour();
+        var child = p1.map(function (x, k) {
+          var a = -0.25 + 1.5 * rng(), v = a * x + (1 - a) * p2[k];
+          if (rng() < 0.25) v += gauss(rng) * 0.06;
+          return Math.max(0, v);
+        });
+        next.push(normW(child));
+      }
+      pop = next;
+    }
+    fits = pop.map(F);
+    var bi = 0; for (i = 1; i < P; i++) if (fits[i] > fits[bi]) bi = i;
+    return { best: pop[bi], curve: curve };
+  }
+
+  // Decide whether to adopt evolved weights using 4-fold cross-validation: evolve on 3 folds, score on the
+  // held-out fold, and require the evolved weights to beat the current ones on average.
+  // Besides the viewer's explicit ratings, random unseen films are added as light negatives, so a loved
+  // film is compared with the whole catalog and not only with the near-misses we chose to show.
+  // ctx = { C: catalog, profile: [indices], exclude: Set of indices never sampled as negatives }
+  function evolve(items, ctx, champion, rng, o) {
+    var nPos = 0, nNeg = 0;
+    items.forEach(function (it) { if (it.label === 1) nPos++; else nNeg++; });
+    if (items.length < 12 || nPos < 3 || nNeg < 3) {
+      return { ok: false, need: Math.max(12 - items.length, 0), msg: 'Rate a few more films (at least 12 ratings, with some loved and some rejected) before the weights can evolve.' };
+    }
+    var all = items.slice(), pool = [], f;
+    for (f = 0; f < ctx.C.films.length; f++) if (!ctx.exclude.has(f)) pool.push(f);
+    for (var s = 0; s < 70 && pool.length; s++) {
+      var pi = Math.floor(rng() * pool.length), nf = pool.splice(pi, 1)[0];
+      all.push(makeItem(ctx.C, ctx.profile, nf, 0, 0.12));
+    }
+    var K = 4, folds = [], tries = 0;
+    while (tries++ < 25) {
+      var idx = all.map(function (_, i) { return i; });
+      for (var i = idx.length - 1; i > 0; i--) { var j = Math.floor(rng() * (i + 1)); var t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+      folds = [];
+      for (var k = 0; k < K; k++) {
+        var val = [], train = [];
+        idx.forEach(function (ix, pos) { (pos % K === k ? val : train).push(all[ix]); });
+        var vp = val.filter(function (x) { return x.label === 1; }).length;
+        var tp = train.filter(function (x) { return x.label === 1; }).length;
+        if (vp >= 1 && val.length - vp >= 1 && tp >= 2 && train.length - tp >= 2) folds.push({ train: train, val: val });
+      }
+      if (folds.length === K) break;
+    }
+    if (folds.length < 2) return { ok: false, need: 0, msg: 'Ratings are too lopsided to validate. Rate a mix of loved and rejected films.' };
+    var sumNew = 0, sumOld = 0;
+    folds.forEach(function (fd) {
+      var res = evolveWeights(fd.train, champion, rng, { pop: 30, gens: 30 });
+      sumNew += fitness(fd.val, res.best); sumOld += fitness(fd.val, champion);
+    });
+    var vNew = sumNew / folds.length, vOld = sumOld / folds.length;
+    var full = evolveWeights(all, champion, rng, o);
+    var promoted = vNew > vOld + 0.005;
+    return {
+      ok: true, promoted: promoted, weights: promoted ? full.best : champion, challenger: full.best, curve: full.curve,
+      valNew: vNew, valOld: vOld, folds: folds.length, trainOld: fitness(all, champion), trainNew: fitness(all, full.best), n: items.length
+    };
+  }
+
+  root.Engine = {
+    GROUPS: GROUPS, INIT_W: INIT_W, Catalog: Catalog, mulberry32: mulberry32, normW: normW,
+    recommend: recommend, taste: taste, explain: explain, makeItem: makeItem, evolve: evolve, fitness: fitness, scoreAll: scoreAll
+  };
+  if (typeof module !== 'undefined' && module.exports) module.exports = root.Engine;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>window.BOOKS_CATALOG={"v":1,"built":"2026-10-14","source":"Open Library","count":150,"cols":["key","title","year","authors","genres","themes","people","rating","pop","cover","desc"],"books":[["OL5030W","Harry Potter and the Philosopher's Stone",1997,["J. K. Rowling"],["Fantasy","Young Adult","Children's","Contemporary Fiction"],["friendship","magic","boarding schools","wizards"],["Harry Potter","Hogwarts"],9.2,735,0,"A famous book called Harry Potter and the Philosopher's Stone."],["OL5074W","To Kill a Mockingbird",1960,["Harper Lee"],["Classics"],[],[],8.5,724,0,"A famous book called To Kill a Mockingbird."],["OL5075W","The Great Gatsby",1925,["F. Scott Fitzgerald"],["Romance","Classics"],[],[],7.9,724,0,"A famous book called The Great Gatsby."],["OL5041W","Pride and Prejudice",1813,["Jane Austen"],["Romance","Classics"],["england","social classes","marriage"],["England"],8.5,649,0,"A famous book called Pride and Prejudice."],["OL5024W","1984",1949,["George Orwell"],["Dystopian"],["politics","totalitarianism","censorship"],["London"],8.5,563,0,"A famous book called 1984."],["OL5028W","The Hunger Games",2008,["Suzanne Collins"],["Young Adult","Dystopian","Adventure"],["survival"],["Katniss Everdeen","Panem"],8.5,477,0,"A famous book called The Hunger Games."],["OL5078W","The Catcher in the Rye",1951,["J. D. Salinger"],["Young Adult","Science Fiction","Classics"],["coming of age"],[],7.3,460,0,"A famous book called The Catcher in the Rye."],["OL5079W","Lord of the Flies",1954,["William Golding"],["Classics","Adventure"],["survival","islands"],[],7.3,454,0,"A famous book called Lord of the Flies."],["OL5031W","Harry Potter and the Chamber of Secrets",1998,["J. K. Rowling"],["Fantasy","Young Adult","Mystery & Crime"],["magic","boarding schools","wizards"],["Harry Potter","Hogwarts"],8.5,443,0,"A famous book called Harry Potter and the Chamber of Secrets."],["OL5160W","Twilight",2005,["Stephenie Meyer"],["Fantasy","Young Adult","Romance"],["vampires"],[],7.3,443,0,"A famous book called Twilight."],["OL5109W","Where the Crawdads Sing",2018,["Delia Owens"],["Mystery & Crime","Young Adult"],["murder","coming of age","north carolina"],[],8.5,424,0,"A famous book called Where the Crawdads Sing."],["OL5055W","The Da Vinci Code",2003,["Dan Brown"],["Thriller","Mystery & Crime","Philosophy & Religion"],["religion","conspiracies","art"],["Paris"],7.3,409,0,"A famous book called The Da Vinci Code."],["OL5105W","The Alchemist",1988,["Paulo Coelho"],["Philosophy & Religion","Adventure"],["fables"],[],7.9,390,0,"A famous book called The Alchemist."],["OL5127W","The Diary of a Young Girl",1947,["Anne Frank"],["Biography & Memoir","Historical Fiction","History"],["world war ii","holocaust"],[],8.5,390,0,"A famous book called The Diary of a Young Girl."],["OL5093W","The Picture of Dorian Gray",1890,["Oscar Wilde"],["Horror","Classics"],["art","london"],[],7.9,385,0,"A famous book called The Picture of Dorian Gray."],["OL5096W","The Kite Runner",2003,["Khaled Hosseini"],["Historical Fiction","Contemporary Fiction"],["friendship","afghanistan","guilt","fathers and sons"],[],8.5,385,0,"A famous book called The Kite Runner."],["OL5076W","Of Mice and Men",1937,["John Steinbeck"],["Classics","Contemporary Fiction"],["friendship","migrant workers","great depression"],[],7.9,368,0,"A famous book called Of Mice and Men."],["OL5053W","Gone Girl",2012,["Gillian Flynn"],["Thriller","Mystery & Crime"],["psychological fiction","marriage"],[],7.9,360,0,"A famous book called Gone Girl."],["OL5098W","The Book Thief",2005,["Markus Zusak"],["Historical Fiction","Young Adult"],["world war ii"],[],8.4,360,0,"A famous book called The Book Thief."],["OL5130W","Atomic Habits",2018,["James Clear"],["Psychology & Self-Help"],["self-improvement","success","habit","productivity"],[],8.4,349,0,"A famous book called Atomic Habits."],["OL5180W","The Girl on the Train",2015,["Paula Hawkins"],["Mystery & Crime","Thriller"],["psychological fiction","murder","alcoholism"],["London"],7.9,349,0,"A famous book called The Girl on the Train."],["OL5044W","Jane Eyre",1847,["Charlotte Brontë"],["Horror","Romance","Classics"],["orphans"],[],7.9,344,0,"A famous book called Jane Eyre."],["OL5081W","Crime and Punishment",1866,["Fyodor Dostoevsky"],["Mystery & Crime","Thriller","Classics"],["crime","psychological fiction","russia","guilt"],[],8.4,338,0,"A famous book called Crime and Punishment."],["OL5125W","Educated",2018,["Tara Westover"],["Biography & Memoir"],["family"],[],8.9,327,0,"A famous book called Educated."],["OL5026W","The Handmaid's Tale",1985,["Margaret Atwood"],["Dystopian","Philosophy & Religion"],["religion","women","totalitarianism"],[],7.9,325,0,"A famous book called The Handmaid's Tale."],["OL5119W","Sapiens: A Brief History of Humankind",2011,["Yuval Noah Harari"],["History","Science & Nature"],["anthropology","evolution","civilization"],[],8.4,312,0,"A famous book called Sapiens: A Brief History of Humankind."],["OL5126W","Becoming",2018,["Michelle Obama"],["Biography & Memoir"],["politics","african americans","women"],["Chicago"],8.9,312,0,"A famous book called Becoming."],["OL5067W","Frankenstein",1818,["Mary Shelley"],["Horror","Science Fiction","Classics"],[],[],7.3,308,0,"A famous book called Frankenstein."],["OL5110W","The Seven Husbands of Evelyn Hugo",2017,["Taylor Jenkins Reid"],["Romance","Historical Fiction"],[],[],8.4,306,0,"A famous book called The Seven Husbands of Evelyn Hugo."],["OL5049W","The Fault in Our Stars",2012,["John Green"],["Romance","Young Adult"],["cancer"],[],8.4,304,0,"A famous book called The Fault in Our Stars."],["OL5155W","The Giver",1993,["Lois Lowry"],["Young Adult","Science Fiction","Dystopian"],["memory"],[],7.9,302,0,"A famous book called The Giver."],["OL5023W","Brave New World",1932,["Aldous Huxley"],["Dystopian","Science Fiction"],["totalitarianism"],["London"],7.9,293,0,"A famous book called Brave New World."],["OL5099W","All the Light We Cannot See",2014,["Anthony Doerr"],["Historical Fiction"],["world war ii","france"],[],8.4,289,0,"A famous book called All the Light We Cannot See."],["OL5133W","Man's Search for Meaning",1946,["Viktor E. Frankl"],["Historical Fiction","Philosophy & Religion","Biography & Memoir","History"],["world war ii","holocaust"],[],8.4,289,0,"A famous book called Man's Search for Meaning."],["OL5066W","Dracula",1897,["Bram Stoker"],["Horror","Fantasy","Classics"],["vampires"],[],7.9,287,0,"A famous book called Dracula."],["OL5007W","A Game of Thrones",1996,["George R. R. Martin"],["Fantasy"],["politics","epic fantasy","dragons"],[],8.4,285,0,"A famous book called A Game of Thrones."],["OL5019W","The Hitchhiker's Guide to the Galaxy",1979,["Douglas Adams"],["Humor","Science Fiction"],["space","satire"],[],8.4,284,0,"A famous book called The Hitchhiker's Guide to the Galaxy."],["OL5094W","One Hundred Years of Solitude",1967,["Gabriel García Márquez"],["Fantasy","Classics"],["family"],[],7.8,284,0,"A famous book called One Hundred Years of Solitude."],["OL5089W","Great Expectations",1861,["Charles Dickens"],["Classics","Young Adult"],["england","social classes","coming of age","orphans"],["London"],7.3,282,0,"A famous book called Great Expectations."],["OL5118W","The Midnight Library",2020,["Matt Haig"],["Fantasy","Contemporary Fiction"],["parallel universes"],[],7.9,282,0,"A famous book called The Midnight Library."],["OL5150W","The Night Circus",2011,["Erin Morgenstern"],["Fantasy","Romance"],["magic"],[],7.8,280,0,"A famous book called The Night Circus."],["OL5054W","The Girl with the Dragon Tattoo",2005,["Stieg Larsson"],["Mystery & Crime","Thriller"],["crime","sweden"],["Sweden"],7.8,278,0,"A famous book called The Girl with the Dragon Tattoo."],["OL5056W","And Then There Were None",1939,["Agatha Christie"],["Mystery & Crime"],["crime","murder","islands"],["England"],8.4,278,0,"A famous book called And Then There Were None."],["OL5068W","The Shining",1977,["Stephen King"],["Horror","Fantasy"],["haunted houses","alcoholism","supernatural"],[],8.4,278,0,"A famous book called The Shining."],["OL5069W","It",1986,["Stephen King"],["Fantasy","Horror","Contemporary Fiction"],["friendship","supernatural"],[],8.4,278,0,"A famous book called It."],["OL5025W","Fahrenheit 451",1953,["Ray Bradbury"],["Science Fiction","Dystopian"],["censorship"],[],7.8,272,0,"A famous book called Fahrenheit 451."],["OL5045W","Wuthering Heights",1847,["Emily Brontë"],["Horror","Romance","Classics"],["revenge"],[],7.3,272,0,"A famous book called Wuthering Heights."],["OL5084W","War and Peace",1869,["Leo Tolstoy"],["Historical Fiction","Classics"],["russia"],["Russia"],7.8,272,0,"A famous book called War and Peace."],["OL5104W","Life of Pi",2001,["Yann Martel"],["Adventure","Philosophy & Religion"],["survival","religion","sea stories"],[],7.8,272,0,"A famous book called Life of Pi."],["OL5112W","The Song of Achilles",2011,["Madeline Miller"],["Fantasy","Romance","Historical Fiction"],["mythology","greek mythology"],[],8.4,270,0,"A famous book called The Song of Achilles."],["OL5153W","Percy Jackson and the Lightning Thief",2005,["Rick Riordan"],["Fantasy","Young Adult","Children's","Adventure"],["mythology","greek mythology"],[],8.4,267,0,"A famous book called Percy Jackson and the Lightning Thief."],["OL5161W","Catching Fire",2009,["Suzanne Collins"],["Young Adult","Dystopian","Adventure"],["survival"],["Katniss Everdeen","Panem"],8.4,267,0,"A famous book called Catching Fire."],["OL5134W","How to Win Friends and Influence People",1936,["Dale Carnegie"],["Psychology & Self-Help","Science & Nature","Business & Economics"],["success"],[],8.4,265,0,"A famous book called How to Win Friends and Influence People."],["OL5086W","The Count of Monte Cristo",1844,["Alexandre Dumas"],["Classics","Adventure"],["france","revenge"],["France"],8.4,263,0,"A famous book called The Count of Monte Cristo."],["OL5057W","Murder on the Orient Express",1934,["Agatha Christie"],["Mystery & Crime"],["crime","murder"],["Hercule Poirot"],8.4,257,0,"A famous book called Murder on the Orient Express."],["OL5085W","Les Misérables",1862,["Victor Hugo"],["Historical Fiction","Classics"],["france","justice"],["Paris"],8.4,257,0,"A famous book called Les Misérables."],["OL5111W","Circe",2018,["Madeline Miller"],["Fantasy"],["mythology","greek mythology","gods"],[],8.3,250,0,"A famous book called Circe."],["OL5004W","The Hobbit",1937,["J. R. R. Tolkien"],["Fantasy","Adventure"],["dragons","quests"],["Middle-earth"],8.4,248,0,"A famous book called The Hobbit."],["OL5140W","The Art of War",0,["Sun Tzu"],["Classics","History","Philosophy & Religion"],["military","china"],[],7.9,248,0,"A famous book called The Art of War."],["OL5162W","Ready Player One",2011,["Ernest Cline"],["Science Fiction","Dystopian"],[],[],7.9,248,0,"A famous book called Ready Player One."],["OL5032W","The Lion, the Witch and the Wardrobe",1950,["C. S. Lewis"],["Fantasy","Young Adult","Children's"],["good and evil"],[],8.4,246,0,"A famous book called The Lion, the Witch and the Wardrobe."],["OL5077W","The Grapes of Wrath",1939,["John Steinbeck"],["Classics"],["family","great depression","migrant workers"],[],7.8,246,0,"A famous book called The Grapes of Wrath."],["OL5088W","Moby-Dick",1851,["Herman Melville"],["Adventure","Classics"],["sea stories"],[],7.3,246,0,"A famous book called Moby-Dick."],["OL5131W","Thinking, Fast and Slow",2011,["Daniel Kahneman"],["Science & Nature","Psychology & Self-Help","Business & Economics"],[],[],8.3,244,0,"A famous book called Thinking, Fast and Slow."],["OL5097W","A Thousand Splendid Suns",2007,["Khaled Hosseini"],["Historical Fiction","Contemporary Fiction"],["friendship","women","afghanistan"],[],8.4,242,0,"A famous book called A Thousand Splendid Suns."],["OL5159W","The Perks of Being a Wallflower",1999,["Stephen Chbosky"],["Young Adult","Contemporary Fiction"],["friendship","coming of age","schools"],[],8.4,242,0,"A famous book called The Perks of Being a Wallflower."],["OL5100W","The Nightingale",2015,["Kristin Hannah"],["Historical Fiction"],["world war ii","france","sisters"],["France"],8.8,239,0,"A famous book called The Nightingale."],["OL5113W","The Secret History",1992,["Donna Tartt"],["Mystery & Crime","Thriller","Classics"],["psychological fiction","murder"],[],7.8,239,0,"A famous book called The Secret History."],["OL5128W","Born a Crime",2016,["Trevor Noah"],["Biography & Memoir","Humor"],[],[],8.8,239,0,"A famous book called Born a Crime."],["OL5151W","Six of Crows",2015,["Leigh Bardugo"],["Fantasy","Young Adult"],["magic","heists"],[],8.8,239,0,"A famous book called Six of Crows."],["OL5029W","Divergent",2011,["Veronica Roth"],["Young Adult","Dystopian"],["society"],["Chicago"],7.9,237,0,"A famous book called Divergent."],["OL5036W","The Little Prince",1943,["Antoine de Saint-Exupéry"],["Fantasy","Classics","Children's","Philosophy & Religion"],["fables"],[],8.4,237,0,"A famous book called The Little Prince."],["OL5083W","Anna Karenina",1878,["Leo Tolstoy"],["Romance","Classics"],["social classes","russia"],["Russia"],7.9,237,0,"A famous book called Anna Karenina."],["OL5157W","Wonder",2012,["R. J. Palacio"],["Young Adult","Children's"],["schools","disability"],[],8.9,237,0,"A famous book called Wonder."],["OL5016W","Ender's Game",1985,["Orson Scott Card"],["Science Fiction"],["military"],[],8.3,233,0,"A famous book called Ender's Game."],["OL5117W","A Man Called Ove",2012,["Fredrik Backman"],["Humor","Contemporary Fiction"],["sweden"],["Sweden"],8.3,233,0,"A famous book called A Man Called Ove."],["OL5033W","Alice's Adventures in Wonderland",1865,["Lewis Carroll"],["Fantasy","Classics","Young Adult","Children's"],[],[],7.9,231,0,"A famous book called Alice's Adventures in Wonderland."],["OL5090W","A Tale of Two Cities",1859,["Charles Dickens"],["Historical Fiction","Classics"],["london"],[],7.4,231,0,"A famous book called A Tale of Two Cities."],["OL5005W","The Fellowship of the Ring",1954,["J. R. R. Tolkien"],["Fantasy","Adventure"],["epic fantasy","good and evil","quests"],["Middle-earth"],8.3,231,0,"A famous book called The Fellowship of the Ring."],["OL5091W","Oliver Twist",1838,["Charles Dickens"],["Mystery & Crime","Classics"],["crime","england","orphans"],["London"],7.4,225,0,"A famous book called Oliver Twist."],["OL5017W","The Martian",2011,["Andy Weir"],["Science Fiction","Adventure"],["survival","mars","space flight"],["Mars"],8.3,224,0,"A famous book called The Martian."],["OL5065W","Rebecca",1938,["Daphne du Maurier"],["Mystery & Crime","Horror","Romance","Classics"],["marriage"],[],8.3,222,0,"A famous book called Rebecca."],["OL5115W","Normal People",2018,["Sally Rooney"],["Romance","Contemporary Fiction"],[],[],7.3,218,0,"A famous book called Normal People."],["OL5006W","The Name of the Wind",2007,["Patrick Rothfuss"],["Fantasy"],["magic","epic fantasy","music"],[],8.3,214,0,"A famous book called The Name of the Wind."],["OL5052W","It Ends with Us",2016,["Colleen Hoover"],["Romance","Contemporary Fiction"],[],[],8.3,214,0,"A famous book called It Ends with Us."],["OL5048W","Me Before You",2012,["Jojo Moyes"],["Romance"],["england","family","disability"],[],8.3,207,0,"A famous book called Me Before You."],["OL5121W","A Brief History of Time",1988,["Stephen Hawking"],["Science & Nature"],["physics","cosmology","astronomy"],[],7.8,207,0,"A famous book called A Brief History of Time."],["OL5064W","The Silent Patient",2019,["Alex Michaelides"],["Thriller","Mystery & Crime"],["psychological fiction"],["London"],7.8,203,0,"A famous book called The Silent Patient."],["OL5116W","Eleanor Oliphant Is Completely Fine",2017,["Gail Honeyman"],["Contemporary Fiction"],["friendship"],[],8.3,203,0,"A famous book called Eleanor Oliphant Is Completely Fine."],["OL5108W","The Stand",1978,["Stephen King"],["Science Fiction","Fantasy","Dystopian","Horror"],["good and evil","pandemics"],["United States"],8.3,201,0,"A famous book called The Stand."],["OL5142W","The Republic",0,["Plato"],["Philosophy & Religion","Classics"],["politics","ethics","justice"],[],7.8,201,0,"A famous book called The Republic."],["OL5018W","Project Hail Mary",2021,["Andy Weir"],["Science Fiction","Adventure"],["survival","space flight","first contact"],[],8.7,199,0,"A famous book called Project Hail Mary."],["OL5046W","Outlander",1991,["Diana Gabaldon"],["Science Fiction","Romance","Historical Fiction"],["time travel"],[],8.3,197,0,"A famous book called Outlander."],["OL5107W","Station Eleven",2014,["Emily St. John Mandel"],["Science Fiction","Dystopian"],["pandemics","music"],[],7.8,197,0,"A famous book called Station Eleven."],["OL5141W","Meditations",180,["Marcus Aurelius"],["Philosophy & Religion","Classics","Psychology & Self-Help"],["self-improvement","ethics"],[],8.3,197,0,"A famous book called Meditations."],["OL5095W","Beloved",1987,["Toni Morrison"],["Horror","Historical Fiction"],["african americans"],[],7.8,195,0,"A famous book called Beloved."],["OL5106W","The Road",2006,["Cormac McCarthy"],["Dystopian","Science Fiction","Adventure"],["survival","fathers and sons"],[],7.8,195,0,"A famous book called The Road."],["OL5000W","Dune",1965,["Frank Herbert"],["Science Fiction"],["politics","space opera"],[],8.3,194,0,"A famous book called Dune."],["OL5009W","Mistborn: The Final Empire",2006,["Brandon Sanderson"],["Fantasy"],["magic","heists"],[],8.7,192,0,"A famous book called Mistborn: The Final Empire."],["OL5012W","American Gods",2001,["Neil Gaiman"],["Fantasy"],["mythology","gods"],["United States"],7.8,192,0,"A famous book called American Gods."],["OL5124W","The Immortal Life of Henrietta Lacks",2010,["Rebecca Skloot"],["Science & Nature","Biography & Memoir","Philosophy & Religion"],["ethics","african americans","cancer"],[],7.8,192,0,"A famous book called The Immortal Life of Henrietta Lacks."],["OL5132W","The 7 Habits of Highly Effective People",1989,["Stephen R. Covey"],["Psychology & Self-Help","Business & Economics"],["self-improvement","success","productivity"],[],7.8,192,0,"A famous book called The 7 Habits of Highly Effective People."],["OL5152W","Shadow and Bone",2012,["Leigh Bardugo"],["Fantasy","Young Adult"],["magic"],[],7.8,192,0,"A famous book called Shadow and Bone."],["OL5035W","Charlie and the Chocolate Factory",1964,["Roald Dahl"],["Fantasy","Young Adult","Children's","Humor"],[],[],8.3,190,0,"A famous book called Charlie and the Chocolate Factory."],["OL5173W","Treasure Island",1883,["Robert Louis Stevenson"],["Adventure","Classics","Young Adult"],[],[],7.3,190,0,"A famous book called Treasure Island."],["OL5063W","Big Little Lies",2014,["Liane Moriarty"],["Mystery & Crime","Contemporary Fiction"],["murder"],[],7.8,186,0,"A famous book called Big Little Lies."],["OL5102W","The Pillars of the Earth",1989,["Ken Follett"],["Historical Fiction"],["england","middle ages"],[],8.3,186,0,"A famous book called The Pillars of the Earth."],["OL5137W","Freakonomics",2005,["Steven D. Levitt","Stephen J. Dubner"],["Humor","Science & Nature","Business & Economics"],[],[],7.8,186,0,"A famous book called Freakonomics."],["OL5040W","Anne of Green Gables",1908,["L. M. Montgomery"],["Young Adult","Classics","Children's"],["coming of age","orphans"],[],8.3,180,0,"A famous book called Anne of Green Gables."],["OL5087W","Don Quixote",1605,["Miguel de Cervantes"],["Humor","Classics"],["satire"],[],7.4,180,0,"A famous book called Don Quixote."],["OL5169W","The Time Machine",1895,["H. G. Wells"],["Science Fiction","Classics"],["social classes","time travel","future"],["England"],7.4,180,0,"A famous book called The Time Machine."],["OL5174W","The Adventures of Sherlock Holmes",1892,["Arthur Conan Doyle"],["Mystery & Crime","Classics"],["crime"],["London","Sherlock Holmes"],8.3,180,0,"A famous book called The Adventures of Sherlock Holmes."],["OL5114W","A Little Life",2015,["Hanya Yanagihara"],["Contemporary Fiction"],["friendship"],[],8.2,177,0,"A famous book called A Little Life."],["OL5135W","The Power of Habit",2012,["Charles Duhigg"],["Psychology & Self-Help","Science & Nature","Business & Economics"],["self-improvement","habit"],[],7.8,177,0,"A famous book called The Power of Habit."],["OL5163W","Red Rising",2014,["Pierce Brown"],["Science Fiction","Dystopian"],["social classes","mars"],["Mars"],8.2,177,0,"A famous book called Red Rising."],["OL5042W","Emma",1815,["Jane Austen"],["Romance","Classics"],["england","social classes"],["England"],7.8,175,0,"A famous book called Emma."],["OL5047W","The Notebook",1996,["Nicholas Sparks"],["Romance"],["memory","north carolina"],[],7.8,175,0,"A famous book called The Notebook."],["OL5070W","Misery",1987,["Stephen King"],["Thriller","Horror"],["psychological fiction"],[],8.3,175,0,"A famous book called Misery."],["OL5170W","The War of the Worlds",1898,["H. G. Wells"],["Science Fiction","Classics"],["england","mars"],["England"],7.4,175,0,"A famous book called The War of the Worlds."],["OL5008W","The Way of Kings",2010,["Brandon Sanderson"],["Fantasy"],["magic","epic fantasy"],[],8.7,171,0,"A famous book called The Way of Kings."],["OL5120W","Guns, Germs, and Steel",1997,["Jared Diamond"],["History","Science & Nature"],["anthropology","civilization","evolution"],[],7.8,171,0,"A famous book called Guns, Germs, and Steel."],["OL5129W","Steve Jobs",2011,["Walter Isaacson"],["Biography & Memoir","Business & Economics"],["technology"],[],7.8,171,0,"A famous book called Steve Jobs."],["OL5034W","Matilda",1988,["Roald Dahl"],["Fantasy","Young Adult","Children's","Humor"],["magic","schools"],[],8.3,169,0,"A famous book called Matilda."],["OL5037W","Charlotte's Web",1952,["E. B. White"],["Young Adult","Children's","Contemporary Fiction"],["friendship"],[],8.3,169,0,"A famous book called Charlotte's Web."],["OL5156W","Holes",1998,["Louis Sachar"],["Mystery & Crime","Young Adult","Children's","Adventure"],["friendship"],[],7.8,169,0,"A famous book called Holes."],["OL5010W","Good Omens",1990,["Terry Pratchett","Neil Gaiman"],["Fantasy","Humor"],[],[],8.2,165,0,"A famous book called Good Omens."],["OL5022W","The Three-Body Problem",2008,["Liu Cixin"],["Science Fiction"],["first contact","physics","china"],[],7.7,162,0,"A famous book called The Three-Body Problem."],["OL5027W","Never Let Me Go",2005,["Kazuo Ishiguro"],["Science Fiction","Dystopian","Young Adult","Contemporary Fiction"],["friendship","boarding schools"],["England"],7.8,160,0,"A famous book called Never Let Me Go."],["OL5082W","The Brothers Karamazov",1880,["Fyodor Dostoevsky"],["Philosophy & Religion","Classics"],["family","russia","religion"],["Russia"],8.2,160,0,"A famous book called The Brothers Karamazov."],["OL5158W","Thirteen Reasons Why",2007,["Jay Asher"],["Young Adult","Mystery & Crime"],["schools"],[],7.8,160,0,"A famous book called Thirteen Reasons Why."],["OL5136W","Quiet",2012,["Susan Cain"],["Science & Nature","Psychology & Self-Help","Business & Economics"],["society"],[],8.2,156,0,"A famous book called Quiet."],["OL5164W","The Expanse: Leviathan Wakes",2011,["James S. A. Corey"],["Science Fiction","Mystery & Crime"],["space opera"],[],8.2,156,0,"A famous book called The Expanse: Leviathan Wakes."],["OL5043W","Sense and Sensibility",1811,["Jane Austen"],["Romance","Classics"],["england","social classes","sisters"],["England"],7.8,154,0,"A famous book called Sense and Sensibility."],["OL5059W","The Hound of the Baskervilles",1902,["Arthur Conan Doyle"],["Mystery & Crime","Classics"],["crime"],["Sherlock Holmes"],8.2,154,0,"A famous book called The Hound of the Baskervilles."],["OL5171W","Twenty Thousand Leagues Under the Sea",1870,["Jules Verne"],["Adventure","Science Fiction","Classics"],["sea stories"],[],7.3,154,0,"A famous book called Twenty Thousand Leagues Under the Sea."],["OL5014W","Foundation",1951,["Isaac Asimov"],["Science Fiction"],["future"],[],8.2,150,0,"A famous book called Foundation."],["OL5138W","The Lean Startup",2011,["Eric Ries"],["Business & Economics"],["technology","entrepreneurship","startups","innovation"],[],7.7,150,0,"A famous book called The Lean Startup."],["OL5103W","The Name of the Rose",1980,["Umberto Eco"],["Mystery & Crime","Historical Fiction"],["middle ages"],[],7.7,145,0,"A famous book called The Name of the Rose."],["OL5148W","Piranesi",2020,["Susanna Clarke"],["Fantasy","Mystery & Crime"],["memory","houses"],[],8.2,141,0,"A famous book called Piranesi."],["OL5139W","Zero to One",2014,["Peter Thiel"],["Business & Economics"],["technology","entrepreneurship","startups","innovation"],[],7.8,135,0,"A famous book called Zero to One."],["OL5058W","The Murder of Roger Ackroyd",1926,["Agatha Christie"],["Mystery & Crime"],["crime","murder"],["England","Hercule Poirot"],8.2,134,0,"A famous book called The Murder of Roger Ackroyd."],["OL5154W","Artemis Fowl",2001,["Eoin Colfer"],["Fantasy","Science Fiction","Mystery & Crime","Young Adult"],["crime"],[],7.7,134,0,"A famous book called Artemis Fowl."],["OL5172W","Around the World in Eighty Days",1872,["Jules Verne"],["Adventure","Classics","Humor"],[],[],7.7,134,0,"A famous book called Around the World in Eighty Days."],["OL5176W","The Bourne Identity",1980,["Robert Ludlum"],["Thriller"],["conspiracies"],[],7.7,134,0,"A famous book called The Bourne Identity."],["OL5122W","Cosmos",1980,["Carl Sagan"],["Science & Nature"],["astronomy","cosmology","space"],[],8.2,130,0,"A famous book called Cosmos."],["OL5145W","Gideon the Ninth",2019,["Tamsyn Muir"],["Science Fiction","Fantasy","Mystery & Crime","Romance"],["space opera"],[],7.7,126,0,"A famous book called Gideon the Ninth."],["OL5013W","Coraline",2002,["Neil Gaiman"],["Fantasy","Horror","Young Adult","Children's"],["houses","parallel universes"],[],7.8,124,0,"A famous book called Coraline."],["OL5015W","I, Robot",1950,["Isaac Asimov"],["Science Fiction"],[],[],8.2,124,0,"A famous book called I, Robot."],["OL5071W","The Haunting of Hill House",1959,["Shirley Jackson"],["Horror","Thriller","Classics"],["psychological fiction","haunted houses"],[],7.4,124,0,"A famous book called The Haunting of Hill House."],["OL5092W","Middlemarch",1871,["George Eliot"],["Classics"],["england","social classes","marriage"],[],7.8,124,0,"A famous book called Middlemarch."]]};</script>
+<script>
+(function () {
+  'use strict';
+  var E = window.Engine, CAT = window.BOOKS_CATALOG;
+  var KEY = 'bookevo-v1';
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function uniq(a) { return a.filter(function (x, i) { return a.indexOf(x) === i; }); }
+  var clamp = function (x, a, b) { return Math.max(a, Math.min(b, x)); };
+  var LS = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage unavailable */ } } };
+
+  var LABELS = ['Genre', 'Author', 'Characters & places', 'Themes', 'Era', 'Quality'];
+  var GENRES = ['Fantasy', 'Science Fiction', 'Mystery & Crime', 'Thriller', 'Horror', 'Romance', 'Historical Fiction', 'Classics', 'Young Adult', "Children's", 'Dystopian', 'Adventure', 'Humor', 'Contemporary Fiction', 'Biography & Memoir', 'History', 'Science & Nature', 'Psychology & Self-Help', 'Business & Economics', 'Philosophy & Religion', 'Fiction', 'Non-fiction'];
+  var FEATURED = ["Harry Potter and the Philosopher's Stone", 'The Hunger Games', 'Pride and Prejudice', '1984', 'The Hobbit', 'Gone Girl', 'Dune', 'The Girl with the Dragon Tattoo', 'Sapiens: A Brief History of Humankind', 'The Kite Runner', 'The Da Vinci Code', 'The Alchemist', 'To Kill a Mockingbird', 'Atomic Habits', 'The Great Gatsby', 'Where the Crawdads Sing'];
+  var QUICK = [
+    ['Epic fantasy', ['The Name of the Wind', 'The Way of Kings', 'A Game of Thrones']],
+    ['Dark and twisty', ['Gone Girl', 'The Girl with the Dragon Tattoo', 'The Silent Patient']],
+    ['Classics', ['Pride and Prejudice', 'Jane Eyre', 'Great Expectations']],
+    ['Big ideas', ['Sapiens: A Brief History of Humankind', 'Thinking, Fast and Slow', 'Atomic Habits']],
+    ['Sci-fi', ['Dune', 'The Martian', "Ender's Game"]]
+  ];
+
+  // ---------- the catalogue (loaded from catalog.js, no network) ----------
+  var books = [], byId = new Map(), Cat = null;
+  if (CAT && CAT.books) {
+    var maxPop = 1; CAT.books.forEach(function (r) { if (r[8] > maxPop) maxPop = r[8]; });
+    books = CAT.books.map(function (r) {
+      var rating = r[7], pop = r[8];
+      var qa = clamp((rating - 6.6) / 2.6, 0, 1), qp = Math.log(1 + pop) / Math.log(1 + maxPop);
+      return { id: parseInt(String(r[0]).replace(/\D/g, ''), 10), key: r[0], title: r[1], year: r[2], authors: r[3], director: r[3][0] || '', genres: r[4], themes: r[5], cast: r[6],
+        rating: rating, votes: pop, q: 0.55 * qa + 0.45 * qp, cover: r[9], overview: r[10], kind: 'book', _s: (r[1] + ' ' + r[3].join(' ')).toLowerCase() };
+    });
+    Cat = new E.Catalog({ person: 'author', group: 'Also features', hiRating: 8.4, hiVotes: 300 });
+    books.forEach(function (b) { Cat.add(b); byId.set(b.id, b); });
+  }
+  // A cover that fails to load (or is missing) becomes a plain coloured block instead of a broken image.
+  document.addEventListener('error', function (e) {
+    var im = e.target; if (!im || im.tagName !== 'IMG' || im.getAttribute('data-ph')) return;
+    var h = 0, src = im.getAttribute('src') || ''; for (var i = 0; i < src.length; i++) h = (h * 31 + src.charCodeAt(i)) % 360;
+    var sp = document.createElement('span'); sp.className = im.className; sp.setAttribute('data-ph', '1');
+    sp.style.cssText = 'display:block;background:linear-gradient(135deg,hsl(' + h + ',32%,34%),hsl(' + h + ',30%,16%));width:100%;height:100%;min-height:100%';
+    if (im.parentNode) im.parentNode.replaceChild(sp, im);
+  }, true);
+  function coverUrl(b, size) { return b && b.cover > 0 ? 'https://covers.openlibrary.org/b/id/' + b.cover + '-' + size + '.jpg' : ''; }
+  function byTitle(t) {
+    var low = t.toLowerCase(), best = null;
+    books.forEach(function (b) { if (b.title.toLowerCase() === low && (!best || b.votes > best.votes)) best = b; });
+    return best;
+  }
+  function searchBooks(q, skip) {
+    q = q.toLowerCase().trim(); if (q.length < 2) return [];
+    var toks = q.split(/\s+/), out = [];
+    for (var i = 0; i < books.length; i++) {
+      var b = books[i], s = b._s;
+      if (skip.indexOf(b.id) >= 0) continue;
+      var ok = true; for (var t = 0; t < toks.length; t++) if (s.indexOf(toks[t]) < 0) { ok = false; break; }
+      if (!ok) continue;
+      var tl = b.title.toLowerCase(), rank = tl.indexOf(q) === 0 ? 3 : s.indexOf(q) === 0 ? 2 : (' ' + tl).indexOf(' ' + toks[0]) >= 0 ? 1 : 0;
+      out.push([rank * 1e9 + b.votes, b]);
+    }
+    out.sort(function (a, b) { return b[0] - a[0]; });
+    return out.slice(0, 8).map(function (x) { return x[1]; });
+  }
+  function STORES(b) {
+    var q = encodeURIComponent(b.title + ' ' + (b.authors[0] || ''));
+    return [
+      { label: 'Open Library', sub: 'Borrow or read', tile: 'OL', url: 'https://openlibrary.org/works/' + b.key },
+      { label: 'WorldCat', sub: 'Find in a library', tile: 'WC', url: 'https://search.worldcat.org/search?q=' + q },
+      { label: 'Bookshop.org', sub: 'Buy, supports shops', tile: 'B', url: 'https://bookshop.org/search?keywords=' + q },
+      { label: 'Google Books', sub: 'Preview or buy', tile: 'GB', url: 'https://www.google.com/search?tbm=bks&q=' + q },
+      { label: 'Goodreads', sub: 'Reviews', tile: 'G', url: 'https://www.goodreads.com/search?q=' + q }
+    ];
+  }
+
+  // ---------- state ----------
+  function freshSession() {
+    return { seeds: [], loved: [], rated: {}, shown: [], listNo: 0, list: null, listProfile: [], logs: [], weights: E.INIT_W.slice(), history: [],
+      curveList: [], curveW: [], evolveRuns: 0, wild: 2, pop: 60, useGA: true, featured: null, activity: [], warn: '', seedsKey: '' };
+  }
+  function load() {
+    var a = { theme: 'auto', saved: [], session: freshSession() };
+    try {
+      var s = JSON.parse(LS.get(KEY) || 'null'); if (!s) return a;
+      if (s.theme) a.theme = s.theme;
+      if (Array.isArray(s.saved)) a.saved = s.saved;
+      if (s.session && s.session.weights && s.session.weights.length === 6) a.session = Object.assign(freshSession(), s.session);
+    } catch (e) { /* corrupt: start fresh */ }
+    return a;
+  }
+  var app = load();
+  var busy = false, ready = !!Cat, tab = 'genres', flash = '';
+  function sess() { return app.session; }
+  function save() { LS.set(KEY, JSON.stringify(app)); }
+  function film(id) { return byId.get(id) || null; }
+  function idxOf(ids) { return ids.map(function (id) { return Cat.idx(id); }).filter(function (i) { return i >= 0; }); }
+  function itemOf(id) { var S = sess(); return S.list ? S.list.filter(function (x) { return x.id === id; })[0] || null : null; }
+  function profileIds(S) { return uniq(S.seeds.map(function (s) { return s.id; }).concat(S.loved.slice(-3))); }
+  function seedsKey(S) { return S.seeds.map(function (s) { return s.id; }).sort().join(','); }
+  function label(f) { return f.title + (f.year ? ' (' + f.year + ')' : ''); }
+  function log(type, text) {
+    var S = sess();
+    S.activity.unshift({ type: type, text: text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) });
+    if (S.activity.length > 30) S.activity.pop();
+  }
+
+  // ---------- recommend ----------
+  function generate(mode) {
+    return new Promise(function (resolve, reject) {
+      var S = sess();
+      if (S.seeds.length < 2) return resolve();
+      if (mode === 'new') { S.loved = []; S.rated = {}; S.shown = []; S.listNo = 0; S.list = null; S.listProfile = []; S.featured = null; }
+      if (mode === 'next' && S.list) S.list.forEach(function (it) { if (S.shown.indexOf(it.id) < 0) S.shown.push(it.id); });
+      $('pickNote').innerHTML = '<span class="spinner" aria-hidden="true"></span>Finding your books…';
+      setTimeout(function () {     // let the spinner paint before the search runs
+        try {
+          var pid = profileIds(S), prof = idxOf(pid);
+          if (prof.length < 2) throw new Error('Those books are not in the catalogue. Try different ones.');
+          var ex = new Set(idxOf(S.seeds.map(function (s) { return s.id; }).concat(S.shown, S.loved, Object.keys(S.rated).map(Number))));
+          var rng = E.mulberry32((Date.now() & 0xffffff) ^ (S.listNo * 7919));
+          var rec = E.recommend(Cat, prof, S.weights, ex, rng, { useGA: S.useGA, wild: S.wild, pop: S.pop, minRating: 7, minVotes: 300 });
+          if (!rec.items.length) { S.warn = 'none'; log('SYSTEM', 'No books left that match.'); return resolve(); }
+          S.warn = rec.items.length < 10 ? 'few' : '';
+          S.list = rec.items.map(function (it) { return { id: Cat.films[it.id].id, wildcard: it.wildcard, seed: Cat.films[it.seed].id, why: it.why }; });
+          S.listProfile = pid; S.curveList = rec.curve; S.featured = S.list[0].id; S.seedsKey = seedsKey(S);
+          S.listNo++;
+          log('LIST', 'List ' + S.listNo + ': ' + S.list.length + ' picks from ' + Cat.films.length + ' books' + (S.useGA ? ', balanced by the genetic algorithm.' : '.'));
+          save(); resolve();
+        } catch (e) { reject(e); }
+      }, 30);
+    });
+  }
+  function runGenerate(mode, after) {
+    if (busy) return;
+    busy = true; renderSeeds(); $('newList').disabled = true;
+    var failed = false;
+    generate(mode).catch(function (e) {
+      failed = true; $('pickNote').textContent = '';
+      flash = '<div class="notice warn">' + esc(e.message) + '</div>';
+    }).then(function () {
+      busy = false; $('newList').disabled = false; $('pickNote').textContent = '';
+      if (!failed) flash = '';
+      renderAll(); if (after) after();
+    });
+  }
+
+  // ---------- seeds + search ----------
+  var input = $('searchInput'), sugg = $('sugg'), active = -1, shownSugg = [], timer = null;
+  function showSugg(html) { sugg.innerHTML = html; sugg.hidden = false; input.setAttribute('aria-expanded', 'true'); }
+  function closeSugg() { sugg.hidden = true; input.setAttribute('aria-expanded', 'false'); }
+  function runSearch() {
+    var q = input.value.trim();
+    if (q.length < 2) { closeSugg(); return; }
+    shownSugg = searchBooks(q, sess().seeds.map(function (s) { return s.id; }));
+    active = shownSugg.length ? 0 : -1;
+    showSugg(shownSugg.length ? shownSugg.map(function (f, i) {
+      var u = coverUrl(f, 'S');
+      return '<li role="option" id="opt' + i + '" data-id="' + f.id + '" aria-selected="' + (i === 0) + '">' +
+        (u ? '<img class="th" alt="" src="' + esc(u) + '">' : '<span class="th"></span>') +
+        '<span><span class="t">' + esc(label(f)) + '</span><span class="m">' + esc(f.authors.join(', ')) + '</span></span></li>';
+    }).join('') : '<li class="none" aria-disabled="true">No book matches that. Try the title or the author\'s name.</li>');
+  }
+  function moveActive(d) {
+    if (!shownSugg.length) return;
+    active = (active + d + shownSugg.length) % shownSugg.length;
+    Array.prototype.forEach.call(sugg.querySelectorAll('li[data-id]'), function (li, i) { li.setAttribute('aria-selected', String(i === active)); });
+    var el = $('opt' + active); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+  }
+  function addSeed(f) {
+    var S = sess();
+    if (S.seeds.some(function (s) { return s.id === f.id; })) return;
+    if (S.seeds.length >= 5) { $('pickNote').textContent = 'Five is the maximum. Remove one to add another.'; closeSugg(); return; }
+    S.seeds.push({ id: f.id, title: f.title, year: f.year });
+    input.value = ''; closeSugg(); save(); renderSeeds();
+  }
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(runSearch, 120); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); if (sugg.hidden) runSearch(); else moveActive(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (!sugg.hidden && shownSugg[active]) addSeed(shownSugg[active]); }
+    else if (e.key === 'Escape') closeSugg();
+  });
+  sugg.addEventListener('mousedown', function (e) {
+    var li = e.target.closest('li[data-id]'); if (!li) return; e.preventDefault();
+    var f = film(parseInt(li.getAttribute('data-id'), 10)); if (f) addSeed(f);
+  });
+  document.addEventListener('click', function (e) { if (!e.target.closest('.search')) closeSugg(); });
+  $('chips').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-rm]'); if (!b) return;
+    var id = parseInt(b.getAttribute('data-rm'), 10), S = sess();
+    S.seeds = S.seeds.filter(function (x) { return x.id !== id; }); save(); renderSeeds();
+  });
+  $('quick').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-q]'); if (!b || busy) return;
+    var found = QUICK[parseInt(b.getAttribute('data-q'), 10)][1].map(byTitle).filter(Boolean);
+    if (found.length < 2) { $('pickNote').textContent = 'Those books are not in the catalogue. Search for your own.'; return; }
+    sess().seeds = found.map(function (f) { return { id: f.id, title: f.title, year: f.year }; });
+    save(); runGenerate('new');
+  });
+  $('go').addEventListener('click', function () {
+    var S = sess();
+    runGenerate(S.list && S.seedsKey === seedsKey(S) ? 'next' : 'new', function () { var s = $('stageCard'); if (!s.hidden && s.scrollIntoView) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  });
+
+  // ---------- rating ----------
+  function rate(val) {
+    var S = sess(), id = S.featured, it = itemOf(id);
+    if (!it || !Cat || busy) return;
+    if (S.rated[id] === val) val = null;
+    S.logs = S.logs.filter(function (ev) { return ev.id !== id; });
+    S.loved = S.loved.filter(function (x) { return x !== id; });
+    var f = film(id);
+    if (val) {
+      S.rated[id] = val;
+      var m = it.wildcard ? 2 : 1, wt = (val === 'watched' ? 1.3 : 1) * m;
+      var item = E.makeItem(Cat, idxOf(S.listProfile), Cat.idx(id), val === 'no' ? 0 : 1, wt);
+      item.id = id; S.logs.push(item);
+      if (val !== 'no') S.loved.push(id);
+      log('RATING', (val === 'no' ? 'Not for me: ' : val === 'watched' ? 'Read it: ' : 'Liked: ') + (f ? f.title : id));
+    } else { delete S.rated[id]; }
+    save();
+    if (val && !advance(id)) {
+      flash = '<div class="notice">All ' + S.list.length + ' rated. Learning from your ratings and building the next list…</div>';
+      renderAll();
+      setTimeout(function () { evolveFlow(true).then(function () { runGenerate('next'); }); }, 500);
+      return;
+    }
+    renderAll();
+  }
+  function advance(fromId) {
+    var S = sess(); if (!S.list) return false;
+    var i = 0; S.list.forEach(function (x, k) { if (x.id === fromId) i = k; });
+    for (var k2 = 1; k2 <= S.list.length; k2++) {
+      var it = S.list[(i + k2) % S.list.length];
+      if (!S.rated[it.id]) { S.featured = it.id; return true; }
+    }
+    return false;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-r]'); if (b && $('teachRow').contains(b)) rate(b.getAttribute('data-r'));
+  });
+  $('nextBtn').addEventListener('click', function () { var S = sess(); if (S.featured) { advance(S.featured); save(); renderAll(); } });
+  document.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target && e.target.tagName; if (t === 'INPUT' || t === 'SELECT' || t === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+    var S = sess(); if ($('stageCard').hidden || !S.featured) return;
+    var k = e.key.toLowerCase();
+    if (k === 'l') rate('love'); else if (k === 'r') rate('watched'); else if (k === 'n') rate('no');
+    else if (e.key === 'ArrowRight') { advance(S.featured); save(); renderAll(); }
+  });
+  $('picks').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-pick]'); if (!b) return;
+    sess().featured = parseInt(b.getAttribute('data-pick'), 10); save(); renderAll();
+    var s = $('stageCard'); if (s.scrollIntoView) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- reading list ----------
+  function isSaved(f) { return app.saved.some(function (x) { return x.id === f.id; }); }
+  $('saveBtn').addEventListener('click', function () {
+    var S = sess(), f = S.featured ? film(S.featured) : null; if (!f) return;
+    if (isSaved(f)) { app.saved = app.saved.filter(function (x) { return x.id !== f.id; }); log('LIST', 'Removed from Reading list: ' + f.title); }
+    else { app.saved.unshift({ id: f.id, title: f.title, year: f.year, authors: f.authors, cover: f.cover }); app.saved = app.saved.slice(0, 100); log('LIST', 'Saved to Reading list: ' + f.title); }
+    save(); renderAll();
+  });
+  $('savedList').addEventListener('click', function (e) {
+    var rm = e.target.closest('button[data-unsave]');
+    if (rm) { var id = parseInt(rm.getAttribute('data-unsave'), 10); app.saved = app.saved.filter(function (x) { return x.id !== id; }); save(); renderAll(); return; }
+    var op = e.target.closest('button[data-open]'); if (!op) return;
+    var oid = parseInt(op.getAttribute('data-open'), 10);
+    if (!film(oid)) return;
+    var S = sess(); S.featured = oid; save(); renderAll();
+    var s = $('stageCard'); if (s.scrollIntoView) s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- learning ----------
+  function evolveNow() {
+    var S = sess();
+    if (!Cat) return { ok: false, msg: 'The catalogue did not load.' };
+    var ctx = { C: Cat, profile: idxOf(profileIds(S)), exclude: new Set(idxOf(S.seeds.map(function (s) { return s.id; }).concat(S.loved, Object.keys(S.rated).map(Number)))) };
+    var res = E.evolve(S.logs, ctx, S.weights, E.mulberry32((Date.now() & 0xffffff) ^ 0x9e37), { pop: 40, gens: 40 });
+    if (!res.ok) return { ok: false, msg: res.msg };
+    S.evolveRuns++; S.curveW = res.curve;
+    if (res.promoted) S.weights = res.weights;
+    S.history.push({ run: S.evolveRuns, n: res.n, oldV: res.valOld, newV: res.valNew, promoted: res.promoted });
+    S.history = S.history.slice(-6);
+    log('EVOLVE', res.promoted ? 'Adopted new weights (held-out ' + Math.round(res.valOld * 100) + '% to ' + Math.round(res.valNew * 100) + '%).' : 'Kept current weights (evolved set was not clearly better).');
+    save();
+    return { ok: true, res: res };
+  }
+  function showEvolve(out) {
+    var box = $('evolve-result');
+    if (!out.ok) { box.className = 'result-box'; box.textContent = out.msg; return; }
+    var r = out.res, pct = function (x) { return Math.round(x * 100) + '%'; };
+    if (r.promoted) { box.className = 'result-box ok'; box.textContent = 'Adopted new weights. On ratings held back for testing, a book you liked outranked one you rejected ' + pct(r.valNew) + ' of the time, up from ' + pct(r.valOld) + '.'; }
+    else { box.className = 'result-box'; box.textContent = 'Kept the current weights. The evolved set scored ' + pct(r.valNew) + ' on held-back ratings against ' + pct(r.valOld) + ' for the current set, not a clear enough gain.'; }
+  }
+  function evolveFlow(quiet) {
+    return new Promise(function (res) { setTimeout(function () { var out = evolveNow(); if (out.ok || !quiet) showEvolve(out); res(out); }, 0); });
+  }
+  $('evolve').addEventListener('click', function () {
+    var btn = this; btn.disabled = true; btn.textContent = 'Evolving…';
+    setTimeout(function () { evolveFlow(false).then(function () { btn.disabled = false; btn.textContent = 'Evolve weights now'; renderAll(); }); }, 30);
+  });
+  $('newList').addEventListener('click', function () {
+    if (busy) return;
+    var btn = this; btn.textContent = 'Working…';
+    setTimeout(function () {
+      evolveFlow(true).then(function () { runGenerate('next', function () { btn.textContent = 'Rate, learn, new list'; var s = $('stageCard'); if (!s.hidden && s.scrollIntoView) s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
+    }, 30);
+  });
+
+  // ---------- settings, theme, reset ----------
+  $('wildSlider').addEventListener('input', function () { sess().wild = parseInt(this.value, 10); $('wildVal').textContent = this.value; });
+  $('wildSlider').addEventListener('change', save);
+  $('popSlider').addEventListener('input', function () { sess().pop = parseInt(this.value, 10); $('popVal').textContent = this.value; });
+  $('popSlider').addEventListener('change', save);
+  $('useGA').addEventListener('change', function () { sess().useGA = this.checked; save(); });
+  function applyTheme() {
+    var r = document.documentElement;
+    if (app.theme === 'light' || app.theme === 'dark') r.setAttribute('data-theme', app.theme); else r.removeAttribute('data-theme');
+    var icons = {
+      auto: '<circle cx="12" cy="12" r="8"/><path d="M12 4v16" /><path d="M12 4a8 8 0 010 16z" fill="currentColor"/>',
+      light: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
+      dark: '<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>'
+    };
+    var b = $('themeBtn');
+    b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + icons[app.theme] + '</svg>';
+    b.setAttribute('aria-label', 'Theme: ' + app.theme + '. Click to change.'); b.title = 'Theme: ' + app.theme;
+  }
+  $('themeBtn').addEventListener('click', function () { app.theme = { auto: 'light', light: 'dark', dark: 'auto' }[app.theme] || 'auto'; applyTheme(); save(); });
+  document.querySelector('.tabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-tab]'); if (b) { tab = b.getAttribute('data-tab'); renderTaste(); } });
+  var resetArmed = false, resetTimer = null;
+  $('reset').addEventListener('click', function () {
+    var b = this;
+    if (!resetArmed) { resetArmed = true; b.textContent = 'Click again to erase your seeds, ratings and weights'; resetTimer = setTimeout(function () { resetArmed = false; renderLearn(); }, 4000); return; }
+    clearTimeout(resetTimer); resetArmed = false;
+    app.session = freshSession(); flash = ''; $('pickNote').textContent = '';
+    $('evolve-result').className = 'result-box'; $('evolve-result').textContent = 'Rate books in your list, then evolve the weights from your ratings.';
+    save(); renderAll();
+  });
+
+  // ---------- render ----------
+  function renderAll() { renderSeeds(); renderStage(); renderPicks(); renderTaste(); renderSaved(); renderSettings(); renderLearn(); renderLog(); renderReadout(); input.disabled = !ready; }
+  function renderReadout() {
+    var S = sess(), n = S.list ? S.list.length : 10, rated = S.list ? S.list.filter(function (i) { return S.rated[i.id]; }).length : 0;
+    $('listNo').textContent = S.listNo; $('ratedCount').textContent = rated + '/' + n;
+  }
+  var tileBooks = null;
+  function tilesList() {
+    if (tileBooks) return tileBooks;
+    var out = [];
+    FEATURED.forEach(function (t) { var b = byTitle(t); if (b && out.indexOf(b) < 0) out.push(b); });
+    if (out.length < 12) books.slice().sort(function (a, b) { return b.votes - a.votes; }).forEach(function (b) { if (out.length < 16 && out.indexOf(b) < 0) out.push(b); });
+    tileBooks = out; return out;
+  }
+  function renderTiles() {
+    var S = sess(), picked = S.seeds.map(function (x) { return x.id; });
+    $('tilesWrap').hidden = false;
+    $('tilesHelp').textContent = 'Tap books you like (2 to 5), or search for your own above.';
+    $('tiles').innerHTML = tilesList().map(function (b, i) {
+      var u = coverUrl(b, 'M'), on = picked.indexOf(b.id) >= 0;
+      return '<button type="button" class="tile" data-tile="' + i + '" aria-pressed="' + on + '" aria-label="' + esc(b.title) + '"' + (!ready ? ' disabled' : '') + '>' +
+        (u ? '<img alt="" loading="lazy" src="' + esc(u) + '">' : '<span class="noimg">' + esc(b.title) + '</span>') + '<span class="cap">' + esc(b.title) + '</span></button>';
+    }).join('');
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tile]'); if (!b) return;
+    var r = tilesList()[parseInt(b.getAttribute('data-tile'), 10)]; if (!r) return;
+    var S = sess(), at = -1;
+    S.seeds.forEach(function (x, i) { if (x.id === r.id) at = i; });
+    if (at >= 0) { S.seeds.splice(at, 1); save(); renderSeeds(); return; }
+    if (S.seeds.length >= 5) { $('pickNote').textContent = 'Five is the maximum. Tap a selected one to remove it.'; return; }
+    S.seeds.push({ id: r.id, title: r.title, year: r.year }); save(); renderSeeds();
+  });
+  function placeSearch(welcome) {
+    var slot = welcome ? $('heroSearch') : $('hdrSearch'), f = $('searchForm');
+    if (f.parentNode !== slot) { var had = document.activeElement === input; slot.appendChild(f); if (had) input.focus(); }
+  }
+  function renderSeeds() {
+    var S = sess(), n = S.seeds.length, has = !!S.list;
+    document.body.classList.toggle('welcome', !has); placeSearch(!has);
+    input.placeholder = has ? 'Search a book you love to add it' : 'Search for a book you love…';
+    $('seedH').textContent = has ? 'Based on your books' : 'What do you love to read?';
+    $('seedSub').textContent = has ? 'Change them and update' : 'Pick 2 to 5 books and we will find your next favourites';
+    if (has) $('tilesWrap').hidden = true; else if (ready) renderTiles();
+    $('chips').innerHTML = n ? S.seeds.map(function (s) {
+      return '<span class="chip-seed"><span>' + esc(label(s)) + '</span><button type="button" data-rm="' + s.id + '" aria-label="Remove ' + esc(s.title) + '">×</button></span>';
+    }).join('') : '<span class="help">Nothing picked yet.</span>';
+    $('quick').innerHTML = has ? '' : '<span class="help">Or try a ready-made mix:</span>' + QUICK.map(function (q, i) { return '<button type="button" class="pill-btn" data-q="' + i + '"' + (busy || !ready ? ' disabled' : '') + '>' + esc(q[0]) + '</button>'; }).join('');
+    var same = has && S.seedsKey === seedsKey(S);
+    var go = $('go'); go.disabled = busy || !ready || n < 2;
+    go.textContent = busy ? 'Working…' : !has ? 'Get my picks' : same ? 'Refresh picks' : 'Update picks';
+    if (!busy) { var note = $('pickNote'); if (!/not in the catalogue|maximum|Five/.test(note.textContent) || n < 5) note.textContent = !ready ? '' : n < 2 ? 'Pick at least 2 books to get recommendations.' : n < 5 ? 'You can add up to ' + (5 - n) + ' more.' : ''; }
+    var banner = '';
+    if (S.warn === 'none') banner = '<div class="notice warn">Nothing left that matches. Change your starting books, or start over.</div>';
+    else if (S.warn === 'few') banner = '<div class="notice warn">Only a few matches are left for this taste. Try different starting books.</div>';
+    $('banner').innerHTML = flash || banner;
+  }
+  function renderStage() {
+    var S = sess(), f = S.featured ? film(S.featured) : null, card = $('stageCard');
+    card.hidden = !f; if (!f) return;
+    var it = itemOf(f.id);
+    $('stageTitleFull').textContent = f.title;
+    $('stageBadge').hidden = !(it && it.wildcard);
+    $('teachRow').hidden = !it;
+    ['love', 'watched', 'no'].forEach(function (r) { var b = document.querySelector('#teachRow [data-r="' + r + '"]'); b.setAttribute('aria-pressed', String(S.rated[f.id] === r)); });
+    var u = coverUrl(f, 'L');
+    $('coverBox').innerHTML = u ? '<img class="cover" src="' + esc(u) + '" alt="Cover of ' + esc(f.title) + '">' : '<div class="cover">' + esc(f.title) + '</div>';
+    $('stageMetaInfo').innerHTML = '<span class="who">by ' + esc(f.authors.join(', ')) + '</span>' + (f.year ? '<span>First published ' + f.year + '</span>' : '');
+    $('stageCast').innerHTML = f.genres.map(function (g) { return '<span class="pill">' + esc(g) + '</span>'; }).join('') + f.themes.slice(0, 5).map(function (g) { return '<span class="pill" style="opacity:.8">' + esc(g) + '</span>'; }).join('');
+    $('stageOverview').textContent = f.overview || 'No description available.';
+    var sv = isSaved(f), sb = $('saveBtn'); sb.setAttribute('aria-pressed', String(sv)); sb.textContent = sv ? '✓ In Reading list' : '+ Add to Reading list';
+    var why = $('whyBox');
+    if (it && (it.why.length || it.seed)) {
+      var seed = film(it.seed);
+      why.hidden = false;
+      why.innerHTML = '<span class="eyebrow">Why this pick</span>' + (it.why.length ? '<ul>' + it.why.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul>' : '') + (seed && !it.wildcard ? '<span class="via">Closest to ' + esc(seed.title) + '</span>' : '');
+    } else why.hidden = true;
+    $('storeActionContainer').innerHTML = STORES(f).map(function (s) {
+      return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer" class="store" title="' + esc(s.label) + ': ' + esc(f.title) + '"><span class="tile" aria-hidden="true">' + esc(s.tile) + '</span><span class="name"><span class="truncate">' + esc(s.label) + '</span><span class="how">' + esc(s.sub) + '</span></span><span class="go" aria-hidden="true">↗</span></a>';
+    }).join('');
+  }
+  function renderPicks() {
+    var S = sess(), card = $('picksCard'); card.hidden = !S.list; if (!S.list) { $('picks').innerHTML = ''; return; }
+    var rated = S.list.filter(function (i) { return S.rated[i.id]; }).length;
+    $('picksSub').textContent = 'List ' + S.listNo + ' · ' + rated + ' of ' + S.list.length + ' rated';
+    $('picks').innerHTML = S.list.map(function (it, i) {
+      var f = film(it.id); if (!f) return '';
+      var r = S.rated[it.id], u = coverUrl(f, 'S');
+      return '<button type="button" class="cand" data-pick="' + it.id + '"' + (S.featured === it.id ? ' aria-current="true"' : '') + '><span class="n">' + (i + 1) + '</span>' +
+        (u ? '<img src="' + esc(u) + '" alt="" loading="lazy">' : '<span class="ph"></span>') +
+        '<span><span class="t">' + esc(f.title) + '</span><span class="d"><span>' + esc(f.authors[0] || '') + (f.year ? ' · ' + f.year : '') + '</span>' + (it.wildcard ? '<span class="tag wild">Wildcard</span>' : '') + (r === 'no' ? '<span class="tag no">Not for me</span>' : r ? '<span class="tag love">' + (r === 'watched' ? 'Read it' : 'Liked') + '</span>' : '') + '</span></span></button>';
+    }).join('');
+  }
+  function eraRows(L, R) {
+    var defs = [['Before 1900', function (d) { return d < 1900; }], ['1900 to 1949', function (d) { return d >= 1900 && d < 1950; }]];
+    for (var d = 1950; d <= 2020; d += 10) (function (dec) { defs.push([dec + 's', function (x) { return x === dec; }]); })(d);
+    var sum = function (m, fn) { var n = 0; Object.keys(m).forEach(function (k) { if (fn(Number(k))) n += m[k]; }); return n; };
+    return defs.map(function (df) { return { k: df[0], n: sum(L.eras, df[1]), r: sum(R.eras, df[1]) }; }).reverse();
+  }
+  function renderTaste() {
+    var S = sess(), list = $('genomeList');
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) { var on = b.getAttribute('data-tab') === tab; b.className = on ? 'tab is-active' : 'tab'; b.setAttribute('aria-selected', String(on)); });
+    var liked = Cat ? idxOf(uniq(S.seeds.map(function (s) { return s.id; }).concat(S.loved))) : [];
+    var rej = Cat ? idxOf(Object.keys(S.rated).filter(function (k) { return S.rated[k] === 'no'; }).map(Number)) : [];
+    if (!liked.length) { list.innerHTML = '<p class="help">Add a few books you love and your taste profile will appear here.</p>'; $('tasteNote').textContent = ''; return; }
+    var t = E.taste(Cat, liked, rej), L = t.liked, R = t.rejected, rows;
+    if (tab === 'genres') {
+      rows = uniq(GENRES.concat(Object.keys(L.genres), Object.keys(R.genres))).map(function (g) { return { k: g, n: L.genres[g] || 0, r: R.genres[g] || 0 }; });
+    } else if (tab === 'directors') {
+      rows = Object.keys(L.directors).map(function (d) { return { k: d, n: L.directors[d], r: R.directors[d] || 0 }; });
+      Object.keys(R.directors).forEach(function (d) { if (!L.directors[d] && R.directors[d] >= 2) rows.push({ k: d, n: 0, r: R.directors[d] }); });
+      rows.sort(function (a, b) { return b.n - a.n || a.k.localeCompare(b.k); }); rows = rows.slice(0, 10);
+    } else rows = eraRows(L, R);
+    if (tab !== 'eras') rows.sort(function (a, b) { return b.n - a.n || a.r - b.r || a.k.localeCompare(b.k); });
+    list.innerHTML = rows.map(function (r) {
+      var share = L.n ? r.n / L.n : 0, avoid = R.n >= 3 && r.r >= 2 && r.r / R.n >= 0.5 && share < 0.5;
+      return '<div class="bar-row' + (r.n ? '' : ' zero') + '"><span class="k truncate" title="' + esc(r.k) + '">' + esc(r.k) + '</span><div class="bar" role="img" aria-label="' + esc(r.k) + ': ' + r.n + ' of ' + L.n + '"><i style="width:' + Math.round(share * 100) + '%"></i></div><span class="v' + (avoid ? ' avoid' : '') + '" title="' + r.n + ' of ' + L.n + ' liked' + (r.r ? ', ' + r.r + ' of ' + R.n + ' rejected' : '') + '">' + (avoid ? 'avoid' : Math.round(share * 100) + '%') + '</span></div>';
+    }).join('');
+    $('tasteNote').textContent = 'Share of the ' + L.n + ' books you like (starting books, likes and read-it) that have each trait.' + (R.n >= 3 ? ' "Avoid" marks traits common in books you rejected.' : '');
+  }
+  function renderSaved() {
+    var el = $('savedList');
+    $('listSub').textContent = app.saved.length ? app.saved.length + ' saved' : '';
+    el.innerHTML = app.saved.length ? app.saved.map(function (f) {
+      var u = f.cover > 0 ? 'https://covers.openlibrary.org/b/id/' + f.cover + '-S.jpg' : '';
+      return '<div class="saved-item"><button type="button" class="open" data-open="' + f.id + '">' + (u ? '<img src="' + esc(u) + '" alt="" loading="lazy">' : '<span class="ph"></span>') +
+        '<span><span class="t">' + esc(f.title) + '</span><br><span class="m">' + esc((f.authors || [])[0] || '') + (f.year ? ' · ' + f.year : '') + '</span></span></button>' +
+        '<button type="button" class="rm" data-unsave="' + f.id + '" aria-label="Remove ' + esc(f.title) + ' from Reading list">×</button></div>';
+    }).join('') : '<p class="help">Nothing saved yet. Use "Add to Reading list" on any book to keep it for later.</p>';
+  }
+  function renderSettings() {
+    var S = sess();
+    $('wildSlider').value = S.wild; $('wildVal').textContent = S.wild; $('popSlider').value = S.pop; $('popVal').textContent = S.pop; $('useGA').checked = S.useGA;
+  }
+  function spark(curve, title, note) {
+    if (!curve || curve.length < 2) return '';
+    var W = 300, H = 84, pl = 38, pr = 10, pt = 10, pb = 22;
+    var mn = Math.min.apply(null, curve), mx = Math.max.apply(null, curve);
+    if (mx - mn < 1e-6) { mx += 0.01; mn -= 0.01; }
+    var X = function (i) { return pl + (W - pl - pr) * i / (curve.length - 1); };
+    var Y = function (v) { return pt + (H - pt - pb) * (1 - (v - mn) / (mx - mn)); };
+    var pts = curve.map(function (v, i) { return X(i).toFixed(1) + ',' + Y(v).toFixed(1); });
+    var area = 'M' + X(0).toFixed(1) + ',' + (H - pb) + ' L' + pts.join(' L') + ' L' + X(curve.length - 1).toFixed(1) + ',' + (H - pb) + ' Z';
+    var last = curve[curve.length - 1];
+    return '<div><h3 class="eyebrow">' + esc(title) + '</h3><svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-label="' + esc(title) + ' went from ' + curve[0].toFixed(3) + ' to ' + last.toFixed(3) + ' over ' + curve.length + ' generations">' +
+      '<line x1="' + pl + '" y1="' + (H - pb) + '" x2="' + (W - pr) + '" y2="' + (H - pb) + '" stroke="var(--line)"/><path d="' + area + '" fill="var(--accent-soft)"/>' +
+      '<polyline points="' + pts.join(' ') + '" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><circle cx="' + X(curve.length - 1).toFixed(1) + '" cy="' + Y(last).toFixed(1) + '" r="3.5" fill="var(--accent)"/>' +
+      '<text x="' + (pl - 5) + '" y="' + (pt + 4) + '" text-anchor="end">' + mx.toFixed(2) + '</text><text x="' + (pl - 5) + '" y="' + (H - pb) + '" text-anchor="end">' + mn.toFixed(2) + '</text>' +
+      '<text x="' + pl + '" y="' + (H - 6) + '">gen 1</text><text x="' + (W - pr) + '" y="' + (H - 6) + '" text-anchor="end">gen ' + curve.length + '</text></svg><p class="help">' + esc(note) + '</p></div>';
+  }
+  function renderLearn() {
+    var S = sess();
+    $('weights').innerHTML = LABELS.map(function (g, i) {
+      var w = S.weights[i], s0 = E.INIT_W[i], scale = 0.6;
+      return '<div class="wrow"><span>' + g + '</span><div class="track"><div class="fill" style="width:' + Math.min(100, w / scale * 100).toFixed(1) + '%"></div><div class="tick" style="left:' + Math.min(100, s0 / scale * 100).toFixed(1) + '%"></div></div><span class="wval">' + Math.round(w * 100) + '%</span></div>';
+    }).join('');
+    var lovedN = S.logs.filter(function (e) { return e.label === 1; }).length;
+    $('stats').innerHTML = '<div class="stat"><b>' + S.logs.length + '</b><span>ratings</span></div><div class="stat"><b>' + lovedN + '</b><span>liked</span></div><div class="stat"><b>' + S.evolveRuns + '</b><span>evolutions</span></div>';
+    $('sparks').innerHTML = spark(S.curveList, 'List GA, best fitness', 'Each generation improves the balance of relevance, variety and coverage of your starting books.') +
+      spark(S.curveW, 'Weight GA, best fitness', 'Win rate of liked books over rejected ones on the training ratings.');
+    $('history').innerHTML = S.history.length ? '<h3 class="eyebrow" style="margin-bottom:6px">Evolution history</h3><table class="hist"><thead><tr><th>Run</th><th>Ratings</th><th>Held-out</th><th>Result</th></tr></thead><tbody>' +
+      S.history.slice().reverse().map(function (h) { return '<tr><td>' + h.run + '</td><td>' + h.n + '</td><td>' + Math.round(h.oldV * 100) + '% to ' + Math.round(h.newV * 100) + '%</td><td>' + (h.promoted ? 'adopted' : 'kept') + '</td></tr>'; }).join('') + '</tbody></table>' : '';
+    if (!resetArmed) $('reset').textContent = 'Start over';
+  }
+  function renderLog() {
+    var S = sess();
+    $('evolutionLog').innerHTML = S.activity.length ? S.activity.map(function (l) { return '<div class="log-row"><span class="tm">' + esc(l.time) + '</span><span class="ty">' + esc(l.type) + '</span><span class="tx">' + esc(l.text) + '</span></div>'; }).join('') : '<p class="help">Nothing yet.</p>';
+  }
+
+  // ---------- boot ----------
+  applyTheme();
+  if (!Cat) {
+    $('setup').hidden = false;
+    $('setup').innerHTML = '<div class="notice warn"><b>The book catalogue did not load.</b> <code>catalog.js</code> must sit in the same folder as this page. Build it with <code>node tools/build-catalog.js</code>, or use the single-file <code>books.html</code>.</div>';
+  } else $('catInfo').textContent = 'Catalogue of ' + books.length.toLocaleString() + ' books, built ' + CAT.built + '.';
+  renderAll();
+})();
+</script>
+</body>
+</html>

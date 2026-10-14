@@ -1,0 +1,56 @@
+name: Refresh book catalogue
+
+# Rebuilds catalog.js from Open Library's monthly bulk dumps and commits it.
+# Run it by hand the first time: Actions tab -> "Refresh book catalogue" -> Run workflow.
+on:
+  schedule:
+    - cron: '0 4 3 * *'      # 04:00 UTC on the 3rd of each month (dumps are published at the start of the month)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      - name: Download Open Library dumps
+        run: |
+          mkdir -p data
+          for n in works authors ratings reading-log; do
+            echo "Downloading $n"
+            curl -fL --retry 4 --retry-delay 20 -A "DomevoBooks catalogue builder (${{ github.repository }})" \
+              -o "data/$n.txt.gz" "https://openlibrary.org/data/ol_dump_${n}_latest.txt.gz"
+          done
+          ls -lh data
+
+      - name: Build catalog.js
+        run: |
+          node build-catalog.js \
+            --works data/works.txt.gz --authors data/authors.txt.gz \
+            --ratings data/ratings.txt.gz --reading-log data/reading-log.txt.gz \
+            --out catalog.new.js --max 15000
+
+      - name: Sanity check
+        run: |
+          node -e "
+            global.window = {};
+            require('./catalog.new.js');
+            const c = window.BOOKS_CATALOG;
+            if (!c || c.count < 3000) { console.error('Too few books: ' + (c && c.count)); process.exit(1); }
+            console.log('OK, ' + c.count + ' books, built ' + c.built);
+          "
+          mv catalog.new.js catalog.js
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "catalogue-bot"
+          git config user.email "catalogue-bot@users.noreply.github.com"
+          git add catalog.js
+          git diff --cached --quiet || git commit -m "Refresh catalogue from Open Library dumps"
+          git push
